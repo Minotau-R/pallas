@@ -2,3 +2,5 @@
 
 export(SPARQLquery)
 export(triple)
+if (getRversion() < "4.3.0") importFrom("S7", "@")
+import(S7)

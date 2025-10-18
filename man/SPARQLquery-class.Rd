@@ -35,3 +35,6 @@ of the query itself.}
 \item{\code{where}}{\code{List} of triples}
 }}
 
+\examples{
+SPARQLquery()
+}

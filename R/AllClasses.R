@@ -17,25 +17,32 @@
 #'     of the query itself.
 #' @param where `List` of triples
 #' @returns a `SPARQLquery` object.
+#' @examples
+#' SPARQLquery()
 #' @export
 #'
 SPARQLquery <- S7::new_class(
-    "pallas",
-    package = "SPARQLquery",
-    parent = S7::class_data.frame,
+    "SPARQLquery",
+    package = "pallas",
+    parent = S7::class_list,
     properties  = list(
-        prefix  = S7::class_list,
-        query   = S7::class_list,
-        where   = S7::class_list
+        prefix  = S7::new_property(getter = function(self) self[["prefix"]]),
+        query   = S7::new_property(getter = function(self) self[["query"]]),
+        where   = S7::new_property(getter = function(self) self[["where"]])
     ),
     constructor = function(
         prefix = list(),
         query = list(),
         where = list()
         ) {
+        x <- list(
+            prefix = prefix,
+            query = query,
+            where = where
+        )
 
         S7::new_object(
-            .parent = S7::S7_object(),
+            .parent = x,
             prefix  = prefix,
             query   = query,
             where   = where
@@ -65,29 +72,33 @@ SPARQLquery <- S7::new_class(
 #' @param object `Character scalar`. Length one or two. First position gives
 #'     object name, second (optional, default `NULL`) gives prefix.
 #' @returns a `triple` object.
+#' @examples
+#' triple()
 #' @export
 #'
 triple <- S7::new_class(
-    "pallas",
-    package = "triple",
-    parent = S7::class_data.frame,
+    "triple",
+    package = "pallas",
+    parent = S7::class_character,
     properties = list(
-        subject   = S7::class_character,
-        predicate = S7::class_character,
-        object    = S7::class_character
+        subject   = S7::new_property(getter = function(self) self[c(1L, 2L)]),
+        predicate = S7::new_property(getter = function(self) self[c(3L, 4L)]),
+        object    = S7::new_property(getter = function(self) self[c(5L, 6L)])
     ),
     constructor = function(
-        subject = c(),
-        predicate = c(),
-        object = c()
+        subject = character(2L),
+        predicate = character(2L),
+        object = character(2L)
         ) {
-
+        x <- c(
+            subject[c(1L, 2L)],
+            predicate[c(1L, 2L)],
+            object[c(1L, 2L)]
+        )
         S7::new_object(
-            .parent   = S7::S7_object(),
-            subject   = subject,
-            predicate = predicate,
-            object    = object
+            .parent = x
         )
     }
 )
+
 

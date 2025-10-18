@@ -10,7 +10,8 @@ Authors@R: c(
 Description: An S7-based R package to construct OWL/SPARQL expressions and query 
     SPARQL endpoints from R. 
 Imports:
-    S7
+    S7,
+    rlang
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
