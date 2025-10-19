@@ -17,6 +17,7 @@
 #'     of the query itself.
 #' @param where `List` of triples
 #' @returns a `SPARQLquery` object.
+#' @importFrom S7 new_class class_list new_property new_object
 #' @examples
 #' SPARQLquery()
 #' @export
@@ -34,7 +35,7 @@ SPARQLquery <- S7::new_class(
         prefix = list(),
         query = list(),
         where = list()
-        ) {
+    ) {
         x <- list(
             prefix = prefix,
             query = query,
@@ -72,8 +73,13 @@ SPARQLquery <- S7::new_class(
 #' @param object `Character scalar`. Length one or two. First position gives
 #'     object name, second (optional, default `NULL`) gives prefix.
 #' @returns a `triple` object.
+#' @importFrom S7 class_character new_property S7_data
 #' @examples
-#' triple()
+#' triple(
+#'     subject = c("sub_prefix", "subject"),
+#'     predicate = c("pred_prefix", "predicate"),
+#'     object = c("obj_prefix", "object")
+#' )
 #' @export
 #'
 triple <- S7::new_class(
@@ -81,23 +87,32 @@ triple <- S7::new_class(
     package = "pallas",
     parent = S7::class_character,
     properties = list(
-        subject   = S7::new_property(getter = function(self) self[c(1L, 2L)]),
-        predicate = S7::new_property(getter = function(self) self[c(3L, 4L)]),
-        object    = S7::new_property(getter = function(self) self[c(5L, 6L)])
+        subject   = S7::new_property(
+            getter = function(self) S7::S7_data(self)[c(1L, 2L)]
+        ),
+        predicate = S7::new_property(
+            getter = function(self) S7::S7_data(self)[c(3L, 4L)]
+        ),
+        object    = S7::new_property(
+            getter = function(self) S7::S7_data(self)[c(5L, 6L)]
+        )
     ),
     constructor = function(
-        subject = character(2L),
-        predicate = character(2L),
-        object = character(2L)
-        ) {
-        x <- c(
-            subject[c(1L, 2L)],
-            predicate[c(1L, 2L)],
-            object[c(1L, 2L)]
+        subject = c("", ""), predicate = c("", ""), object = c("", "")
+    ) {
+        stopifnot(
+            "Args must be length one: c('name') or two: c('prefix', 'name')." =
+                length(subject) %in% c(1L, 2L) &&
+                length(predicate) %in% c(1L, 2L) &&
+                length(object) %in% c(1L, 2L)
         )
-        S7::new_object(
-            .parent = x
-        )
+        if(length(subject) == 1L) { subject <- c("", subject) }
+        if(length(predicate) == 1L) { predicate <- c("", predicate) }
+        if(length(object) == 1L) { object <- c("", object) }
+
+        x <- c( subject[c(1L, 2L)], predicate[c(1L, 2L)], object[c(1L, 2L)] )
+        x[is.na(x)] <- ""
+        S7::new_object( .parent = x )
     }
 )
 

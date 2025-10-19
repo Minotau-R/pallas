@@ -4,11 +4,7 @@
 \alias{triple}
 \title{S7 class to contain an RDF triple.}
 \usage{
-triple(
-  subject = character(2L),
-  predicate = character(2L),
-  object = character(2L)
-)
+triple(subject = c("", ""), predicate = c("", ""), object = c("", ""))
 }
 \arguments{
 \item{subject}{\verb{Character vector}. Length one or two. First position gives
@@ -43,5 +39,9 @@ object name, second (optional, default \code{NULL}) gives prefix.}
 }}
 
 \examples{
-triple()
+triple(
+    subject = c("sub_prefix", "subject"),
+    predicate = c("pred_prefix", "predicate"),
+    object = c("obj_prefix", "object")
+)
 }
