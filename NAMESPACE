@@ -3,6 +3,7 @@
 export(SPARQLquery)
 export(predicate)
 export(predicate.formula)
+export(predicate_factory)
 export(triple)
 if (getRversion() < "4.3.0") importFrom("S7", "@")
 import(S7)
