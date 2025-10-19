@@ -14,6 +14,11 @@
 Define triple by predicate
 }
 \examples{
-x <- triple()
+x <- triple(
+    subject = c("sub_prefix", "subject"),
+    predicate = c("pred_prefix", "predicate"),
+    object = c("obj_prefix", "object")
+)
 predicate(x)
+
 }

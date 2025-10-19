@@ -21,12 +21,17 @@ S7::method(predicate, S7::class_formula) <-
 
 predicate.formula <- function(x, what) {
 
+    y <- .handleQvar(rlang::enexpr(x))
+    if(!isFALSE(y)) x <- y
+    rm(y)
+
     stopifnot("'what' must be of type 'character'." = is.character(what))
     stopifnot("Length of' what' must be 1 or 2." = length(what) %in% c(1L, 2L))
 
+
     stopifnot("'x' must be a formula. " = inherits(x, "formula"))
-    subject <- all.vars(x[[2L]])
-    object  <- all.vars(x[[3L]])
+    subject <- if(is.character(x[[2L]])) x[[2L]] else all.vars(x[[2L]])
+    object  <- if(is.character(x[[3L]])) x[[3L]] else all.vars(x[[3L]])
     if(! length(subject) %in% c(1L, 2L) ) {
         stop(
             "Issue with left-hand side of 'x' (subject).\n       ",
