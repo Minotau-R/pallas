@@ -4,13 +4,16 @@
 \alias{predicate_factory}
 \title{Generate custom functions based on available predicates.}
 \usage{
-predicate_factory(x, to.list = TRUE)
+predicate_factory(x, to.list = TRUE, vocab.table = NULL)
 }
 \arguments{
 \item{x}{\verb{Character scalar}. Names of the desired predicate functions.}
 
 \item{to.list}{\verb{Logical scalar}. Whether to return functions in a list
 (\code{TRUE}, Default) or to the environment (\code{FALSE}).}
+
+\item{vocab.table}{\code{data.frame}. Used to customize input hints. Output of
+\code{map_endpoint} with \code{return.table} set to \code{TRUE}. (Default: NULL).}
 }
 \value{
 A list of functions, or to the environment.

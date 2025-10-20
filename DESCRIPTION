@@ -12,7 +12,8 @@ Description: An S7-based R package to construct OWL/SPARQL expressions and query
 Imports:
     S7,
     rlang, 
-    httr
+    httr, 
+    stats
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

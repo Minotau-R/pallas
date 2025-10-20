@@ -4,10 +4,13 @@
 \alias{map_endpoint}
 \title{Map out a SPARQL endpoint.}
 \usage{
-map_endpoint(endpoint_url)
+map_endpoint(endpoint_url, return.table = FALSE)
 }
 \arguments{
 \item{endpoint_url}{\verb{Character scalar} sparql endpoint url.}
+
+\item{return.table}{\code{Boolean}. Whether to return the raw output table. For
+development and debugging. (Default: \code{FALSE}).}
 }
 \value{
 a data frame with ?domain ?property ?range columns.
@@ -18,7 +21,7 @@ Fetch information about known relational information from a sparql endpoint.
 \examples{
 # Don't query endpoints unintentionally.
 if(FALSE) {
-    map_endpoint("https://sparql.uniprot.org/")
+    x <- map_endpoint("https://sparql.uniprot.org/")
 }
 
 }
