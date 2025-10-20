@@ -19,8 +19,16 @@ is to serve as a template to generate prefix-specific functions for each
 predicate known by the endpoint.
 }
 \examples{
+# predicate defines a triple:
 predicate(
     x = sub_prefix:subject ~ ob_prefix:object,
     what = c("prefix", "predicate")
 )
+
+# predicate() handles '?' symbols (Unlike regular formula objects).
+predicate(a:b~c:d, what = "")
+predicate( ?b~c:d, what = "")
+predicate(a:b~ ?d, what = "")
+predicate( ?b~ ?d, what = "")
+
 }

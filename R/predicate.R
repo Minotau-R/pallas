@@ -8,12 +8,20 @@
 #' @param what `Character scalar`. Which predicate to use.
 #' @param ... additional arguments
 #' @importFrom S7 method<- class_formula
+#' @returns a `triple` object.
 #' @examples
+#' # predicate defines a triple:
 #' predicate(
 #'     x = sub_prefix:subject ~ ob_prefix:object,
 #'     what = c("prefix", "predicate")
 #' )
-#' @returns a `triple` object.
+#'
+#' # predicate() handles '?' symbols (Unlike regular formula objects).
+#' predicate(a:b~c:d, what = "")
+#' predicate( ?b~c:d, what = "")
+#' predicate(a:b~ ?d, what = "")
+#' predicate( ?b~ ?d, what = "")
+#'
 #' @export
 S7::method(predicate, S7::class_formula) <-
     function(x, what) predicate.formula(x, what)
@@ -21,9 +29,10 @@ S7::method(predicate, S7::class_formula) <-
 
 predicate.formula <- function(x, what) {
 
-    y <- .handleQvar(rlang::enexpr(x))
+    y <- .defuseqLHS(rlang::enexpr(x))
     if(!isFALSE(y)) x <- y
     rm(y)
+    x <- .qRHS(x)
 
     stopifnot("'what' must be of type 'character'." = is.character(what))
     stopifnot("Length of' what' must be 1 or 2." = length(what) %in% c(1L, 2L))
@@ -46,3 +55,5 @@ predicate.formula <- function(x, what) {
     }
     triple(subject, what, object)
 }
+
+

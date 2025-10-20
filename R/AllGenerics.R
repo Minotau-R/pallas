@@ -7,24 +7,25 @@
 #' @param x object to dispatch on
 #' @param ... additional arguments
 #' @importFrom S7 new_generic
+#' @importFrom rlang enexpr
 #' @examples
 #' predicate
 #' @returns an R object.
 #' @export
 predicate <- S7::new_generic("predicate", "x", fun = function(x, ...) {
-    y <- .handleQvar(rlang::enexpr(x))
+    y <- .defuseqLHS(rlang::enexpr(x))
     if(!isFALSE(y)) x <- y
     rm(y)
     S7::S7_dispatch()
 })
 
 
-#' @importFrom rlang enexpr is_function
 #' @description We expect formula to start with "?". This function catches and
 #'     sorts this out before dispatch.
 #' @noRd
+#' @importFrom rlang as_label
 #'
-.handleQvar <- function(x) {
+.defuseqLHS <- function(x) {
 
     if(as.character(x)[1L] == "?") {
         LHS <- paste0("?", rlang::as_label(eval(x[[-1L]])[[2L]]))
@@ -35,3 +36,14 @@ predicate <- S7::new_generic("predicate", "x", fun = function(x, ...) {
 
 }
 
+#' @noRd
+#' @param rlang as_label is_symbol
+#'
+.qRHS <- function(x) {
+    if(rlang::is_symbol(x[[3L]])) { return(x) }
+    if(as.character(x[[3L]][1L]) == "?") {
+        RHS <- paste0("?", rlang::as_label(x[[3L]][[2L]]))
+        x[[3L]] <- RHS
+    }
+    return(x)
+}
