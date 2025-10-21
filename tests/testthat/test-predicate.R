@@ -1,8 +1,8 @@
 test_that("predicate takes questionmarks", {
-  x1 <- predicate(a:b~c:d, what = "")
-  x2 <- predicate( ?b~c:d, what = "")
-  x3 <- predicate(a:b~ ?d, what = "")
-  x4 <- predicate( ?b~ ?d, what = "")
+  x1 <- predicate(a:b~c:d, what = "", prefix = "")
+  x2 <- predicate( ?b~c:d, what = "", prefix = "")
+  x3 <- predicate(a:b~ ?d, what = "", prefix = "")
+  x4 <- predicate( ?b~ ?d, what = "", prefix = "")
 
   expect_equal(
       x1,

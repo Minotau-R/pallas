@@ -8,6 +8,9 @@
 
 \item{what}{\verb{Character scalar}. Which predicate to use.}
 
+\item{prefix}{\verb{Character scalar}. Name of the prefix the class is from.
+(Default: \code{""})}
+
 \item{...}{additional arguments}
 }
 \value{
@@ -22,13 +25,14 @@ predicate known by the endpoint.
 # predicate defines a triple:
 predicate(
     x = sub_prefix:subject ~ ob_prefix:object,
-    what = c("prefix", "predicate")
-)
+    what = "predicate",
+    prefix = "prefix"
+    )
 
 # predicate() handles '?' symbols (Unlike regular formula objects).
-predicate(a:b~c:d, what = "")
-predicate( ?b~c:d, what = "")
-predicate(a:b~ ?d, what = "")
-predicate( ?b~ ?d, what = "")
+predicate(a:b~c:d, what = "", prefix = "pa")
+predicate( ?b~c:d, what = "", prefix = "b")
+predicate(a:b~ ?d, what = "", prefix = "c")
+predicate( ?b~ ?d, what = "", prefix = "d")
 
 }

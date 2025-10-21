@@ -6,6 +6,8 @@
 #'     predicate known by the endpoint.
 #' @param x `formula`. Describing the relationship `subject ~ object`.
 #' @param what `Character scalar`. Which predicate to use.
+#' @param prefix `Character scalar`. Name of the prefix the class is from.
+#'     (Default: `""`)
 #' @param ... additional arguments
 #' @importFrom S7 method<- class_formula
 #' @returns a `triple` object.
@@ -13,20 +15,21 @@
 #' # predicate defines a triple:
 #' predicate(
 #'     x = sub_prefix:subject ~ ob_prefix:object,
-#'     what = c("prefix", "predicate")
-#' )
+#'     what = "predicate",
+#'     prefix = "prefix"
+#'     )
 #'
 #' # predicate() handles '?' symbols (Unlike regular formula objects).
-#' predicate(a:b~c:d, what = "")
-#' predicate( ?b~c:d, what = "")
-#' predicate(a:b~ ?d, what = "")
-#' predicate( ?b~ ?d, what = "")
+#' predicate(a:b~c:d, what = "", prefix = "pa")
+#' predicate( ?b~c:d, what = "", prefix = "b")
+#' predicate(a:b~ ?d, what = "", prefix = "c")
+#' predicate( ?b~ ?d, what = "", prefix = "d")
 #'
 S7::method(predicate, S7::class_formula) <-
-    function(x, what) predicate.formula(x, what)
+    function(x, what, prefix) predicate.formula(x, what, prefix)
 
 
-predicate.formula <- function(x, what) {
+predicate.formula <- function(x, what, prefix) {
 
     y <- .defuseqLHS(rlang::enexpr(x))
     if(!isFALSE(y)) x <- y
@@ -52,7 +55,7 @@ predicate.formula <- function(x, what) {
             "Should be one variable, or two, if connected by ':'. "
         )
     }
-    triple(subject, what, object)
+    triple(subject, c(prefix, what), object)
 }
 
 

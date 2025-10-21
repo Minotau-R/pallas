@@ -1,8 +1,8 @@
 test_that("a_class takes questionmarks", {
-    x1 <- a_class(  a,  what = c("p", "c"))
+    x1 <- a_class(  a,  what = "c", prefix = "p")
     x2 <- a_class( ?b,  what = "c")
     x3 <- a_class(a:b,  what = "?huh")
-    x4 <- a_class("?b", what = c("c"))
+    x4 <- a_class("?b", what = "c")
 
     expect_equal(
         x1,

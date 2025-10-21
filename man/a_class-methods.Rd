@@ -8,6 +8,9 @@
 
 \item{what}{\verb{Character scalar}. Which type to use.}
 
+\item{prefix}{\verb{Character scalar}. Name of the prefix the class is from.
+(Default: \code{""})}
+
 \item{...}{additional arguments}
 }
 \value{
@@ -23,8 +26,9 @@ endpoint.
 \examples{
 # a_class defines a triple:
 # a_class() handles '?' symbols.
-a_class(A, what = c("prefix", "type"))
-a_class(?A, what = c("prefix", "type"))
+a_class(A, what = "type", prefix = "p")
+a_class(?A, what = "type", prefix = "p")
+a_class(p_A:A, what = "type", prefix = "p")
 
 }
 \seealso{

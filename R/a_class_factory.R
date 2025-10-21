@@ -1,6 +1,8 @@
 #' @title Generate custom `a` functions based on available types.
 #' @name a_class_factory
-#' @param x `Character scalar`. Names of the desired type functions.
+#' @param x `Character vector`. Names of the desired type functions.
+#' @param prefix `Character scalar`. Name of the prefix the class is from.
+#'     (Default: `""`)
 #' @param to.list `Logical scalar`. Whether to return functions in a list
 #'     (`TRUE`, Default) or to the environment (`FALSE`).
 #' @returns A list of functions, or to the environment.
@@ -13,22 +15,23 @@
 #'
 #' @export
 #'
-a_class_factory <- function(x, to.list = TRUE) {
+a_class_factory <- function(x, prefix = "", to.list = TRUE) {
     if(to.list) {
-        type_list <- lapply(x, .assign_a_class)
+        type_list <- lapply(x, .assign_a_class, prefix = prefix)
         names(type_list) <- x
         return(type_list)
     } else {
         for (i in x) {
-            assign(i, .assign_a_class(i) )
+            assign(i, .assign_a_class(i, prefix) )
         }
     }
 }
 
-.assign_a_class <- function(i) {
+.assign_a_class <- function(i, prefix) {
     force(i)
+    force(prefix)
     function(... = "?var") {
-        a_class(..., what = i)
+        a_class(..., what = i, prefix = prefix)
     }
 }
 

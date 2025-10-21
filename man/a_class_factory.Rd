@@ -4,10 +4,13 @@
 \alias{a_class_factory}
 \title{Generate custom \code{a} functions based on available types.}
 \usage{
-a_class_factory(x, to.list = TRUE)
+a_class_factory(x, prefix = "", to.list = TRUE)
 }
 \arguments{
-\item{x}{\verb{Character scalar}. Names of the desired type functions.}
+\item{x}{\verb{Character vector}. Names of the desired type functions.}
+
+\item{prefix}{\verb{Character scalar}. Name of the prefix the class is from.
+(Default: \code{""})}
 
 \item{to.list}{\verb{Logical scalar}. Whether to return functions in a list
 (\code{TRUE}, Default) or to the environment (\code{FALSE}).}

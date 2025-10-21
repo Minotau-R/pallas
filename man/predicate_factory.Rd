@@ -4,10 +4,13 @@
 \alias{predicate_factory}
 \title{Generate custom functions based on available predicates.}
 \usage{
-predicate_factory(x, to.list = TRUE, vocab.table = NULL)
+predicate_factory(x, prefix = "", to.list = TRUE, vocab.table = NULL)
 }
 \arguments{
 \item{x}{\verb{Character scalar}. Names of the desired predicate functions.}
+
+\item{prefix}{\verb{Character scalar}. Name of the prefix the class is from.
+(Default: \code{""})}
 
 \item{to.list}{\verb{Logical scalar}. Whether to return functions in a list
 (\code{TRUE}, Default) or to the environment (\code{FALSE}).}
@@ -22,7 +25,11 @@ A list of functions, or to the environment.
 Generate custom functions based on available predicates.
 }
 \examples{
-P <- predicate_factory(x = c("predicate_A", "predicate_B", "predicate_C"))
+
+P <- predicate_factory(
+    x = c("predicate_A", "predicate_B", "predicate_C"),
+    prefix = "a"
+    )
 
 P$predicate_A(subject ~ object)
 P$predicate_B(subject ~ object)

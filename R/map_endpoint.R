@@ -68,7 +68,7 @@ WHERE {
         vocab_list, function(y) (unique(y[y %in% c(vocab$domain, vocab$range)]))
     )
     class_list <- class_list[lengths(class_list) != 0L]
-    class_list <- lapply(class_list, a_class_factory)
+    class_list <- mapply(a_class_factory, class_list, names(class_list))
 
     out_list <- list(
         P = pred_list,
