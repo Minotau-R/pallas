@@ -1,10 +1,12 @@
 #' @export
 #'
-S7::method(print, SPARQLquery) <- function(x, ...) {
+S7::method(print, vocabulary) <- function(x, ...) {
     cat(
         paste0(paste(class(x), collapse = " "), ".\n")
     )
-    print(S7::S7_data(x))
+    y <- S7::S7_data(x)
+    y$prefix <- .prefix_to_SPARQL(y$prefix[["PREFIX"]])
+    print(y)
     if( length(x@prefix) == 0L ) {
         message(
             "No 'prefix' found. Add one or more prefixes with `add_prefix()`."
@@ -18,3 +20,9 @@ S7::method(print, SPARQLquery) <- function(x, ...) {
     }
     invisible(NULL)
 }
+
+.prefix_to_SPARQL <- function(x) {
+    if(is.null(x)) {return(list())}
+    paste0( "PREFIX ", apply(x, 1L, paste0, collapse = ": <"), ">" )
+}
+

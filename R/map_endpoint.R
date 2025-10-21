@@ -53,10 +53,12 @@ WHERE {
 
     if(strip.blank) all_URIs <- all_URIs[all_URIs != "_"]
 
+    pre_tab <- .make_prefix_table(all_URIs)
+
     vocab_list <- lapply(
         all_URIs, function(x) unique(vocab[URIs == x])
     )
-    names(vocab_list) <- all_URIs
+    names(vocab_list) <- pre_tab[["short"]]
 
     pred_list <- lapply(
         vocab_list, function(y) (unique(y[y %in% x$property]))
@@ -77,14 +79,10 @@ WHERE {
         a_class_factory, class_list, names(class_list), SIMPLIFY = FALSE
         )
 
-    out_list <- list(
-        P = pred_list,
-        C = class_list
-    )
-    return( out_list )
+    vocabulary( prefix = list(PREFIX = pre_tab, P = pred_list, C = class_list) )
 }
 
-.keep_URI <- function(x) sub("^(.*)/.*", "\\1", x)
+.keep_URI <- function(x) sub("^(.*)/.*", "\\1/", x)
 .drop_URI <- function(x) sub("^.*(.*)/", "\\1", x)
 
 #' @description x is a data.frame with three columns. This function filters out
@@ -97,4 +95,14 @@ WHERE {
         ! do.call(`&`, lapply(x[c(1L, 2L)], grepl, pattern = "^_:") ),
 
         )
+}
+
+.make_prefix_table <- function(uris, prior = NULL) {
+    uris <- uris[! uris %in% prior$uri ]
+    short <- sub("^.*(.*)/", "", sub("/$", "", uris))
+    bad <- grepl("^[^A-Za-z]", short)
+    short[bad] <- sub("^", "x", short[bad])
+
+    prefix_table <- data.frame( short = short, uri = uris )
+    rbind.data.frame(prefix_table, prior)
 }

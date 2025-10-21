@@ -1,8 +1,8 @@
 #' S7 class to contain a SPARQL query.
-#' @name SPARQLquery
-#' @rdname SPARQLquery-class
+#' @name vocabulary
+#' @rdname vocabulary-class
 #' @description
-#' `SPARQLquery` is an S7 class to compose and manage `SPARQL` queries.
+#' `vocabulary` is an S7 class to compose and manage `SPARQL` queries.
 #'
 #' @slot prefix `Named list of character scalars`, where values are long-form
 #'     and names are the corresponding abbreviation.
@@ -16,14 +16,14 @@
 #'     query form (SELECT, ASK, DESCRIBE), and the second indicating the content
 #'     of the query itself.
 #' @param where `List` of triples
-#' @returns a `SPARQLquery` object.
+#' @returns a `vocabulary` object.
 #' @importFrom S7 new_class class_list new_property new_object
 #' @examples
-#' SPARQLquery()
+#' vocabulary()
 #' @export
 #'
-SPARQLquery <- S7::new_class(
-    "SPARQLquery",
+vocabulary <- S7::new_class(
+    "vocabulary",
     package = "pallas",
     parent = S7::class_list,
     properties  = list(
@@ -41,13 +41,7 @@ SPARQLquery <- S7::new_class(
             query = query,
             where = where
         )
-
-        S7::new_object(
-            .parent = x,
-            prefix  = prefix,
-            query   = query,
-            where   = where
-        )
+        S7::new_object( .parent = x )
     }
 )
 
