@@ -25,7 +25,9 @@ predicate_factory <- function(
         x, prefix = "", to.list = TRUE, vocab.table = NULL
         ) {
     if(to.list) {
-        pred_list <- lapply(x, .assign_pred, prefix, vocab.table)
+        pred_list <- lapply(
+            x, .assign_pred, prefix = prefix, vocab.table = vocab.table
+            )
         names(pred_list) <- x
         return(pred_list)
     } else {

@@ -26,10 +26,10 @@
 #' predicate( ?b~ ?d, what = "", prefix = "d")
 #'
 S7::method(predicate, S7::class_formula) <-
-    function(x, what, prefix) predicate.formula(x, what, prefix)
+    function(x, what, prefix = "") predicate.formula(x, what, prefix)
 
 
-predicate.formula <- function(x, what, prefix) {
+predicate.formula <- function(x, what, prefix = "") {
 
     y <- .defuseqLHS(rlang::enexpr(x))
     if(!isFALSE(y)) x <- y
@@ -38,7 +38,7 @@ predicate.formula <- function(x, what, prefix) {
 
     stopifnot("'what' must be of type 'character'." = is.character(what))
     stopifnot("Length of' what' must be 1 or 2." = length(what) %in% c(1L, 2L))
-
+    if(length(what) == 1L) what <- c(prefix, what)
 
     stopifnot("'x' must be a formula. " = inherits(x, "formula"))
     subject <- if(is.character(x[[2L]])) x[[2L]] else all.vars(x[[2L]])
@@ -55,7 +55,7 @@ predicate.formula <- function(x, what, prefix) {
             "Should be one variable, or two, if connected by ':'. "
         )
     }
-    triple(subject, c(prefix, what), object)
+    triple(subject, what, object)
 }
 
 

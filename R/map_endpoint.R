@@ -62,13 +62,20 @@ WHERE {
         vocab_list, function(y) (unique(y[y %in% x$property]))
     )
     pred_list <- pred_list[lengths(pred_list) != 0L]
-    pred_list <- lapply(pred_list, predicate_factory, vocab.table = vocab)
+    pred_list <- mapply(
+        predicate_factory,
+        x = pred_list, prefix = names(pred_list),
+        MoreArgs = list(vocab.table = vocab),
+        SIMPLIFY = FALSE
+        )
 
     class_list <- lapply(
         vocab_list, function(y) (unique(y[y %in% c(vocab$domain, vocab$range)]))
     )
     class_list <- class_list[lengths(class_list) != 0L]
-    class_list <- mapply(a_class_factory, class_list, names(class_list))
+    class_list <- mapply(
+        a_class_factory, class_list, names(class_list), SIMPLIFY = FALSE
+        )
 
     out_list <- list(
         P = pred_list,
