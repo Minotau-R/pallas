@@ -6,6 +6,8 @@
 #' @inheritParams send_query
 #' @param return.table `Boolean`. Whether to return the raw output table. For
 #'     development and debugging. (Default: `FALSE`).
+#' @param strip.blank `Boolean`. Whether to remove blank nodes from the result.
+#' (Default: `TRUE`)
 #' @export
 #' @returns a data frame with ?domain ?property ?range columns.
 #' @examples
@@ -14,7 +16,9 @@
 #'     x <- map_endpoint("https://sparql.uniprot.org/")
 #' }
 #'
-map_endpoint <- function(endpoint_url, return.table = FALSE) {
+map_endpoint <- function(
+        endpoint_url, strip.blank = TRUE, return.table = FALSE
+) {
     query <-
         "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -26,10 +30,16 @@ WHERE {
     ?property rdfs:domain ?domain
 }"
     x <- send_query(query, endpoint_url, out_format = "text/csv")
+    if(strip.blank) x <- .not_between_blanks(x)
 
     if(return.table) {return(x)}
     # Else; (default)
+    out_list <- .reponse_to_out_list(x, strip.blank)
 
+    return( out_list )
+}
+
+.reponse_to_out_list <- function(x, strip.blank) {
     URIs <- x
     URIs[] <- lapply(x, .keep_URI)
     x[]    <- lapply(x, .drop_URI)
@@ -41,33 +51,43 @@ WHERE {
 
     all_URIs  <- unique(unlist(URIs, use.names = FALSE))
 
-    vocab_list <- lapply(
-        all_URIs,
-        function(x) unique(vocab[URIs == x])
-    )
+    if(strip.blank) all_URIs <- all_URIs[all_URIs != "_"]
 
+    vocab_list <- lapply(
+        all_URIs, function(x) unique(vocab[URIs == x])
+    )
     names(vocab_list) <- all_URIs
 
     pred_list <- lapply(
-        vocab_list,
-        function(y) (unique(y[y %in% x$property]))
+        vocab_list, function(y) (unique(y[y %in% x$property]))
     )
     pred_list <- pred_list[lengths(pred_list) != 0L]
     pred_list <- lapply(pred_list, predicate_factory, vocab.table = vocab)
 
     class_list <- lapply(
-        vocab_list,
-        function(y) (unique(y[y %in% c(vocab$domain, vocab$range)]))
+        vocab_list, function(y) (unique(y[y %in% c(vocab$domain, vocab$range)]))
     )
     class_list <- class_list[lengths(class_list) != 0L]
+    class_list <- lapply(class_list, a_class_factory)
 
     out_list <- list(
         P = pred_list,
         C = class_list
     )
-
     return( out_list )
 }
 
 .keep_URI <- function(x) sub("^(.*)/.*", "\\1", x)
 .drop_URI <- function(x) sub("^.*(.*)/", "\\1", x)
+
+#' @description x is a data.frame with three columns. This function filters out
+#' rows where the first two columns start with "_:".
+#' @noRd
+#'
+.not_between_blanks <- function(x) {
+    `[`(
+        x,
+        ! do.call(`&`, lapply(x[c(1L, 2L)], grepl, pattern = "^_:") ),
+
+        )
+}

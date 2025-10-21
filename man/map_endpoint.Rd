@@ -4,10 +4,13 @@
 \alias{map_endpoint}
 \title{Map out a SPARQL endpoint.}
 \usage{
-map_endpoint(endpoint_url, return.table = FALSE)
+map_endpoint(endpoint_url, strip.blank = TRUE, return.table = FALSE)
 }
 \arguments{
 \item{endpoint_url}{\verb{Character scalar} sparql endpoint url.}
+
+\item{strip.blank}{\code{Boolean}. Whether to remove blank nodes from the result.
+(Default: \code{TRUE})}
 
 \item{return.table}{\code{Boolean}. Whether to return the raw output table. For
 development and debugging. (Default: \code{FALSE}).}

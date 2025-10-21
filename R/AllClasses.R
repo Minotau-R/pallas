@@ -123,7 +123,24 @@ triple <- S7::new_class(
 
 #' @param x `Character vector`. subject, predicate or object of a triple.
 #' @noRd
-.organiseQvars <- function(x) if(x[1L] == "" && grepl("^\\?", x[2L])) {
-    c("?", sub("^\\?", replacement = "", x[2L]))
-} else x
+.organiseQvars <- function(x) {
+    if( x[1L] != "" ) {
+        return( x )
+    }
+    if( grepl("^\\?", x[2L]) ) {
+        return( c("?", sub("^\\?", replacement = "", x[2L])) )
+    }
+    if( grepl("^.*:.*$", x[2L]) ) {
+        x <- unlist(strsplit(x[2L], split = ":", fixed = TRUE), FALSE, FALSE)
+        if(length(x) != 2L) {
+            stop(
+                "Triple args 'subject', 'predicate', 'object'\n    ",
+                "should each only contain one ':' character at most."
+            )
+        }
+    }
+    return( x )
+}
+
+
 

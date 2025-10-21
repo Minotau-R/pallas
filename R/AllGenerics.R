@@ -20,11 +20,11 @@ predicate <- S7::new_generic("predicate", "x", fun = function(x, ...) {
 })
 
 #' @title Define triple by class type.
-#' @name a_type
-#' @rdname a_type-generic
+#' @name a_class
+#' @rdname a_class-generic
 #' @description
-#' `a_type()` is a helper function to mimic the `a <Class>` pattern in sparql.
-#' While `a_type()` could be called directly, the intended use is to serve as a
+#' `a_class()` is a helper function to mimic the `a <Class>` pattern in sparql.
+#' While `a_class()` could be called directly, the intended use is to serve as a
 #' template to generate prefix-specific functions for each type known by the
 #' endpoint.
 #' @param x object to dispatch on
@@ -32,11 +32,11 @@ predicate <- S7::new_generic("predicate", "x", fun = function(x, ...) {
 #' @importFrom S7 new_generic S7_dispatch
 #' @importFrom rlang enexpr
 #' @examples
-#' a_type
+#' a_class
 #' @returns an R object.
 #' @export
 #'
-a_type <- S7::new_generic("a_type", "x", fun = function(x, ...) {
+a_class <- S7::new_generic("a_class", "x", fun = function(x, ...) {
     y <- rlang::enexpr(x)
     if( as.character(y)[[1L]] == "?" ) x <- paste0(
         as.character(y)[[1L]],
