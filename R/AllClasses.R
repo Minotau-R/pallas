@@ -107,8 +107,13 @@ triple <- S7::new_class(
                 length(object) %in% c(1L, 2L)
         )
         if(length(subject) == 1L) { subject <- c("", subject) }
+        subject <- .organiseQvars(subject)
+
         if(length(predicate) == 1L) { predicate <- c("", predicate) }
+        predicate <- .organiseQvars(predicate)
+
         if(length(object) == 1L) { object <- c("", object) }
+        object <- .organiseQvars(object)
 
         x <- c( subject[c(1L, 2L)], predicate[c(1L, 2L)], object[c(1L, 2L)] )
         x[is.na(x)] <- ""
@@ -116,4 +121,9 @@ triple <- S7::new_class(
     }
 )
 
+#' @param x `Character vector`. subject, predicate or object of a triple.
+#' @noRd
+.organiseQvars <- function(x) if(x[1L] == "" && grepl("^\\?", x[2L])) {
+    c("?", sub("^\\?", replacement = "", x[2L]))
+} else x
 
