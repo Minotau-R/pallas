@@ -27,7 +27,9 @@ vocabulary <- S7::new_class(
     package = "pallas",
     parent = S7::class_list,
     properties  = list(
-        prefix  = S7::new_property(getter = function(self) self[["prefix"]]),
+        prefix  = S7::new_property(getter = function(self) {
+            .prefix_to_SPARQL(self[["prefix"]][["PREFIX"]])
+            }),
         query   = S7::new_property(getter = function(self) self[["query"]]),
         where   = S7::new_property(getter = function(self) self[["where"]])
     ),
