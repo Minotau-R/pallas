@@ -22,14 +22,9 @@ endpoint.
 }
 \examples{
 # a_type defines a triple:
-a_type(
-    x = var,
-    what = c("prefix", "type")
-)
-
 # a_type() handles '?' symbols.
-a_type(a, what = "")
-a_type(?a, what = "")
+a_type(A, what = c("prefix", "type"))
+a_type(?A, what = c("prefix", "type"))
 
 }
 \seealso{

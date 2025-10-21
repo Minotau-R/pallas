@@ -1,6 +1,6 @@
 #' @title Define triple by class, type.
 #' @name a_type.name
-#' @rdname a_type.name
+#' @rdname a_type-methods
 #' @description
 #'  `a_type()` is a helper function to mimic the `a <Class>` pattern
 #' in sparql.
@@ -15,16 +15,14 @@
 #' @returns a `triple` object.
 #' @examples
 #' # a_type defines a triple:
-#' a_type(
-#'     x = var,
-#'     what = c("prefix", "type")
-#' )
-#'
+# a_type(
+#     x = var,
+#     what = c("prefix", "type")
+# )
 #' # a_type() handles '?' symbols.
-#' a_type(a, what = "")
-#' a_type(?a, what = "")
+#' a_type(A, what = c("prefix", "type"))
+#' a_type(?A, what = c("prefix", "type"))
 #'
-#' @export
 S7::method(a_type, S7::class_name) <-
     function(x, what) a_type.name(enexpr(x), what)
 

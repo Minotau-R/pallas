@@ -2,10 +2,8 @@
 
 export(SPARQLquery)
 export(a_type)
-export(a_type.name)
 export(map_endpoint)
 export(predicate)
-export(predicate.formula)
 export(predicate_factory)
 export(send_query)
 export(triple)

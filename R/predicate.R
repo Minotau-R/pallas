@@ -22,7 +22,6 @@
 #' predicate(a:b~ ?d, what = "")
 #' predicate( ?b~ ?d, what = "")
 #'
-#' @export
 S7::method(predicate, S7::class_formula) <-
     function(x, what) predicate.formula(x, what)
 
