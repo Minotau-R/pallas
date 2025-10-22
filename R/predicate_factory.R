@@ -52,10 +52,10 @@ predicate_factory <- function(
     }
     # Else
     force(vocab.table)
-    hint <- vocab.table[vocab.table$property == i, c(1, 2)]
+    hint <- vocab.table[vocab.table[["property"]] == i, c(1, 2)]
     hint <- reformulate(
-        paste0(hint$range, collapse = " "),
-        paste0(hint$domain, collapse = " ")
+        paste0(hint[["range"]], collapse = " "),
+        paste0(hint[["domain"]], collapse = " ")
     )
     # Return a wrapper around predicate.formula.
     # Adjust formals to contain hint.

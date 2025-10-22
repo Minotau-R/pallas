@@ -3,13 +3,16 @@
 #' @rdname vocabulary-class
 #' @description
 #' `vocabulary` is an S7 class to compose and manage `SPARQL` queries.
-#'
+#' @slot lexicon `Named list`. Contains convenience functions, for instance
+#'     those generated from `map_endpoint()`
 #' @slot prefix `Named list of character scalars`, where values are long-form
 #'     and names are the corresponding abbreviation.
 #' @slot query `Named list` of character vectors, with first element indicating
 #'     query form (SELECT, ASK, DESCRIBE), and the second indicating the content
 #'      of the query itself.
 #' @slot where `List` of triples
+#' @param lexicon `Named list`. Contains convenience functions, for instance
+#'     those generated from `map_endpoint()`
 #' @param prefix `Named list of character scalars`, where values are long-form
 #'     and names are the corresponding abbreviation.
 #' @param query `Named list` of character vectors, with first element indicating
@@ -27,13 +30,16 @@ vocabulary <- S7::new_class(
     package = "pallas",
     parent = S7::class_list,
     properties  = list(
-        prefix  = S7::new_property(getter = function(self) {
-            .prefix_to_SPARQL(self[["prefix"]][["PREFIX"]])
-            }),
+        lexicon = S7::class_list,
+        P = S7::new_property(getter = function(self) self@lexicon$predicates),
+        C = S7::new_property(getter = function(self) self@lexicon$classes),
+
+        prefix  = S7::new_property(getter = function(self) self[["prefix"]]),
         query   = S7::new_property(getter = function(self) self[["query"]]),
         where   = S7::new_property(getter = function(self) self[["where"]])
     ),
     constructor = function(
+        lexicon = list(),
         prefix = list(),
         query = list(),
         where = list()
@@ -43,7 +49,10 @@ vocabulary <- S7::new_class(
             query = query,
             where = where
         )
-        S7::new_object( .parent = x )
+        S7::new_object(
+            .parent = x,
+            lexicon = lexicon
+                        )
     }
 )
 

@@ -4,9 +4,12 @@
 \alias{vocabulary}
 \title{S7 class to contain a SPARQL query.}
 \usage{
-vocabulary(prefix = list(), query = list(), where = list())
+vocabulary(lexicon = list(), prefix = list(), query = list(), where = list())
 }
 \arguments{
+\item{lexicon}{\verb{Named list}. Contains convenience functions, for instance
+those generated from \code{map_endpoint()}}
+
 \item{prefix}{\verb{Named list of character scalars}, where values are long-form
 and names are the corresponding abbreviation.}
 
@@ -25,6 +28,9 @@ a \code{vocabulary} object.
 \section{Slots}{
 
 \describe{
+\item{\code{lexicon}}{\verb{Named list}. Contains convenience functions, for instance
+those generated from \code{map_endpoint()}}
+
 \item{\code{prefix}}{\verb{Named list of character scalars}, where values are long-form
 and names are the corresponding abbreviation.}
 

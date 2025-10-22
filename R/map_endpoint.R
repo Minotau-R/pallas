@@ -1,5 +1,6 @@
 #' @title Map out a SPARQL endpoint.
 #' @name map_endpoint
+#' @rdname building-queries
 #' @description
 #' Fetch information about known relational information from a sparql endpoint.
 #'
@@ -14,6 +15,7 @@
 #' # Don't query endpoints unintentionally.
 #' if(FALSE) {
 #'     x <- map_endpoint("https://sparql.uniprot.org/")
+#'         x |> where_clause()
 #' }
 #'
 map_endpoint <- function(
@@ -61,7 +63,7 @@ WHERE {
     names(vocab_list) <- pre_tab[["short"]]
 
     pred_list <- lapply(
-        vocab_list, function(y) (unique(y[y %in% x$property]))
+        vocab_list, function(y) (unique(y[y %in% x[["property"]]]))
     )
     pred_list <- pred_list[lengths(pred_list) != 0L]
     pred_list <- mapply(
@@ -72,14 +74,19 @@ WHERE {
         )
 
     class_list <- lapply(
-        vocab_list, function(y) (unique(y[y %in% c(vocab$domain, vocab$range)]))
+        vocab_list,
+        function(y) unique( y[y %in% c( vocab[["domain"]], vocab[["range"]] )] )
     )
     class_list <- class_list[lengths(class_list) != 0L]
-    class_list <- mapply(
-        a_class_factory, class_list, names(class_list), SIMPLIFY = FALSE
-        )
+    class_list <-
+        mapply(a_class_factory, class_list, names(class_list), SIMPLIFY = FALSE)
 
-    vocabulary( prefix = list(PREFIX = pre_tab, P = pred_list, C = class_list) )
+    vocabulary(
+        lexicon = list(
+            predicates = pred_list, classes = class_list, prefix_table = pre_tab
+            ),
+        prefix = .prefix_to_SPARQL(pre_tab)
+    )
 }
 
 .keep_URI <- function(x) sub("^(.*)/.*", "\\1/", x)
@@ -98,7 +105,7 @@ WHERE {
 }
 
 .make_prefix_table <- function(uris, prior = NULL) {
-    uris <- uris[! uris %in% prior$uri ]
+    uris <- uris[! uris %in% prior[["uri"]] ]
     short <- sub("^.*(.*)/", "", sub("/$", "", uris))
     bad <- grepl("^[^A-Za-z]", short)
     short[bad] <- sub("^", "x", short[bad])
