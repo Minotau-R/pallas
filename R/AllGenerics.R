@@ -47,6 +47,28 @@ a_class <- S7::new_generic("a_class", "x", fun = function(x, ...) {
     S7::S7_dispatch()
 })
 
+#' @title Define one or more triples for a SPARQL WHERE-clause.
+#' @name where_clause
+#' @rdname where_clause-queries
+#' @param x An object.
+#' @param ... `Expression` or sequence of expression separated by comma's, that
+#'     each define an RDF triple for the where clause.
+#' @returns a `vocabulary` with the defined expressions included in the `where`
+#'     slot.
+#' @export
+#'
+where_clause <- S7::new_generic("where_clause", "x")
+
+#' @title Define a SELECT SPARQL command.
+#' @name select_query
+#' @rdname select_query-queries
+#' @param x An object.
+#' @param ... `Expression` the SELECT statement.
+#' @returns a `vocabulary` with the defined expressions included in the `query`
+#'     slot.
+#' @export
+#'
+select_clause <- S7::new_generic("select_query", "x")
 
 #' @description We expect formula to start with "?". This function catches and
 #'     sorts this out before dispatch.

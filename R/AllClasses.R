@@ -35,8 +35,8 @@ vocabulary <- S7::new_class(
         C = S7::new_property(getter = function(self) self@lexicon$classes),
 
         prefix  = S7::new_property(getter = function(self) self[["prefix"]]),
-        query   = S7::new_property(getter = function(self) self[["query"]]),
-        where   = S7::new_property(getter = function(self) self[["where"]])
+        query   = S7::new_property( getter = function(self) self[["query"]]),
+        where   = S7::new_property( getter = function(self) self[["where"]])
     ),
     constructor = function(
         lexicon = list(),
@@ -125,6 +125,34 @@ triple <- S7::new_class(
         S7::new_object( .parent = x )
     }
 )
+
+
+#' S7 class to mark domain-specific helper functions.
+#' @name term
+#' @rdname term-class
+#' @description
+#' A `term` is an S7 class to reflect an RDF term. In RDF, vocabularies are sets
+#' of terms used to describe things. A term is either a class or a property.
+#' In practice, `term` is a thin wrapper around `function`.
+#' @slot hint `Character scalar`. Used to print nicer information for generated
+#'     functions.
+#' @param hint `Character scalar`. Used to print nicer information for generated
+#'     functions.
+#' @examples
+#' term
+#'
+#' @export
+#'
+term <- S7::new_class(
+    "term",
+    package = "pallas",
+    parent = S7::class_function, properties = list(hint = S7::class_character),
+    constructor = function(x, hint = "")
+        S7::new_object(
+            .parent = x,
+            hint = hint)
+)
+
 
 #' @param x `Character vector`. subject, predicate or object of a triple.
 #' @noRd

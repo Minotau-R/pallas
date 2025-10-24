@@ -2,12 +2,10 @@
 % Please edit documentation in R/map_endpoint.R, R/where_clause.R
 \name{map_endpoint}
 \alias{map_endpoint}
-\alias{where_clause}
+\alias{where_clause.vocabulary}
 \title{Map out a SPARQL endpoint.}
 \usage{
 map_endpoint(endpoint_url, strip.blank = TRUE, return.table = FALSE)
-
-where_clause(x, ...)
 }
 \arguments{
 \item{endpoint_url}{\verb{Character scalar} sparql endpoint url.}
@@ -17,17 +15,9 @@ where_clause(x, ...)
 
 \item{return.table}{\code{Boolean}. Whether to return the raw output table. For
 development and debugging. (Default: \code{FALSE}).}
-
-\item{x}{\code{vocabulary} object.}
-
-\item{...}{\code{Expression} or sequence of expression separated by comma's, that
-each define an RDF triple for the where clause.}
 }
 \value{
 a data frame with ?domain ?property ?range columns.
-
-a \code{vocabulary} with the defined expressions included in the \code{where}
-slot.
 }
 \description{
 Fetch information about known relational information from a sparql endpoint.

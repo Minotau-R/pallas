@@ -6,6 +6,9 @@
 #' @return the name of the extra data slot
 NULL
 
+
+
+
 #' @export
 #'
 S7::method(print, vocabulary) <- function(x, ...) {
