@@ -7,8 +7,13 @@
 term(x, hint = "")
 }
 \arguments{
+\item{x}{\code{function} to be decorated to \code{term}.}
+
 \item{hint}{\verb{Character scalar}. Used to print nicer information for generated
 functions.}
+}
+\value{
+an object of class \code{term}.
 }
 \description{
 A \code{term} is an S7 class to reflect an RDF term. In RDF, vocabularies are sets

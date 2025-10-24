@@ -44,27 +44,32 @@ predicate_factory <- function(
     force(i)
     force(prefix)
     if(is.null(vocab.table)) {
-        return (
-            function(... = subject ~ object ) {
-                predicate.formula(..., what = i, prefix = prefix)
-            }
-        )
-    }
+        hint <- "?subject ~ ?object"
+    } else {
     # Else
     force(vocab.table)
     hint <- vocab.table[vocab.table[["property"]] == i, c(1, 2)]
-    hint <- reformulate(
-        paste0(hint[["range"]], collapse = " "),
-        paste0(hint[["domain"]], collapse = " ")
+    hint <- paste0(
+        "<?", paste0(hint[["range"]], collapse = " "),
+        "> ", prefix, ":", i, " <?",
+        paste0(hint[["domain"]], collapse = " "),">"
     )
+    }
+
+    out_fun <- function(... = "?subject ~ ?object") {
+        predicate.formula(..., what = i, prefix = prefix)
+    }
+    out_fun <- term(out_fun, hint = hint)
+
+    return(out_fun)
     # Return a wrapper around predicate.formula.
     # Adjust formals to contain hint.
-    rlang::`fn_fmls<-`(
-        function(... = subject ~ object ) {
-            predicate.formula(..., what = i, prefix = prefix)
-        },
-        value = list("..." = hint)
-    )
+    # rlang::`fn_fmls<-`(
+    #     function(... = subject ~ object ) {
+    #         predicate.formula(..., what = i, prefix = prefix)
+    #     },
+    #     value = list("..." = hint)
+    # )
 }
 
 

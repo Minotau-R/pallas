@@ -30,9 +30,12 @@ a_class_factory <- function(x, prefix = "", to.list = TRUE) {
 .assign_a_class <- function(i, prefix) {
     force(i)
     force(prefix)
-    function(... = "?var") {
+    hint <- paste0("<?var> a ", prefix, ":", i)
+    out_fun <- function(... = "?var") {
         a_class(..., what = i, prefix = prefix)
     }
+    out_fun <- term(out_fun, hint = hint)
+    return(out_fun)
 }
 
 

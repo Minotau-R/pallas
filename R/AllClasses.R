@@ -136,8 +136,10 @@ triple <- S7::new_class(
 #' In practice, `term` is a thin wrapper around `function`.
 #' @slot hint `Character scalar`. Used to print nicer information for generated
 #'     functions.
+#' @param x `function` to be decorated to `term`.
 #' @param hint `Character scalar`. Used to print nicer information for generated
 #'     functions.
+#' @returns an object of class `term`.
 #' @examples
 #' term
 #'
