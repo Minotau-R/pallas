@@ -29,8 +29,7 @@ endpoint.
 a_class(A, what = "type", prefix = "p")
 a_class(?A, what = "type", prefix = "p")
 a_class(p_A:A, what = "type", prefix = "p")
-
 }
 \seealso{
-\code{\link[=predicate.formula]{predicate.formula()}}
+\link{predicate-methods}
 }

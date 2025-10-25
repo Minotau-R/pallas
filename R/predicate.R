@@ -1,6 +1,6 @@
 #' Define triple by predicate
-#' @name predicate.formula
-#' @rdname predicate.formula
+#' @name predicate-methods
+#' @rdname predicate-methods
 #' @description While `predicate()` could be called directly, the intended use
 #'     is to serve as a template to generate prefix-specific functions for each
 #'     predicate known by the endpoint.
@@ -9,7 +9,6 @@
 #' @param prefix `Character scalar`. Name of the prefix the class is from.
 #'     (Default: `""`)
 #' @param ... additional arguments
-#' @importFrom S7 method<- class_formula
 #' @returns a `triple` object.
 #' @examples
 #' # predicate defines a triple:
@@ -25,16 +24,47 @@
 #' predicate(a:b~ ?d, what = "", prefix = "c")
 #' predicate( ?b~ ?d, what = "", prefix = "d")
 #'
+NULL
+
+
+#' @export
+#' @importFrom S7 method<- class_call method
+S7::method(predicate, S7::class_call) <- function(x, what = "", prefix = "") {
+    x <- predicate.call(substitute(x))
+    # Call formula method
+    (S7::method(predicate, object = x))(x, what, prefix)
+}
+
+predicate.call <- function(x)  {
+    x_1 <- as.character(x[[1L]])
+    stopifnot("Input arg 'x' cannot be of length 0." = length(x_1) != 0L)
+
+    # Content is a vector:
+    if(x_1 == "c") {
+        x[[1L]] <- rlang::expr(`~`)
+        x_1 <- as.character(x[[1L]])
+    }
+
+    # Starting with "?"
+    if(x_1 == "?") {
+        x <- x[[-1L]]
+        x[[2L]] <-  str2lang(paste0("?", x[[2L]]))
+        x_1 <- as.character(x[[1L]])
+    }
+    x <- eval(x, envir = NULL)
+    return(x)
+}
+
+#' @importFrom S7 method<- class_formula
+#' @export
+#'
 S7::method(predicate, S7::class_formula) <-
-    function(x, what, prefix = "") predicate.formula(x, what, prefix)
+    function(x, what = "", prefix = "") predicate.formula(x, what, prefix)
 
 
-predicate.formula <- function(x, what, prefix = "") {
 
-    y <- .defuseqLHS(rlang::enexpr(x))
-    if(!isFALSE(y)) x <- y
-    rm(y)
-    x <- .qRHS(x)
+predicate.formula <- function(x, what = "", prefix = "") {
+    x <- .Qs2var(x)
 
     stopifnot("'what' must be of type 'character'." = is.character(what))
     stopifnot("Length of' what' must be 1 or 2." = length(what) %in% c(1L, 2L))
@@ -58,4 +88,24 @@ predicate.formula <- function(x, what, prefix = "") {
     triple(subject, what, object)
 }
 
+
+#' @noRd
+#' @description
+#' Handles variables that start with a ?.
+#' @param x formula
+.Qs2var <- function(x) {
+    stopifnot("Input should be a formula." = inherits(x, "formula"))
+    LHS <- .Q2var(x[[2L]])
+    RHS <- .Q2var(x[[3L]])
+    do.call("~", c(LHS, RHS))
+}
+
+.Q2var <- function(x) {
+    if(is.call(x)) {
+        if(as.character(x)[[1L]] == "?") {
+            x <- as.symbol(paste0("?", x[[-1L]]))
+        }
+    }
+    return(x)
+}
 

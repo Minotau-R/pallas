@@ -13,9 +13,10 @@
 #' @returns an R object.
 #' @export
 predicate <- S7::new_generic("predicate", "x", fun = function(x, ...) {
-    y <- .defuseqLHS(rlang::enexpr(x))
-    if(!isFALSE(y)) x <- y
-    rm(y)
+    x <- rlang::enexpr(x)
+    # y <- .defuseqLHS(rlang::enexpr(x))
+    # if(!isFALSE(y)) x <- y
+    # rm(y)
     S7::S7_dispatch()
 })
 
@@ -37,13 +38,15 @@ predicate <- S7::new_generic("predicate", "x", fun = function(x, ...) {
 #' @export
 #'
 a_class <- S7::new_generic("a_class", "x", fun = function(x, ...) {
-    y <- rlang::enexpr(x)
-    if( as.character(y)[[1L]] == "?" ) x <- paste0(
-        as.character(y)[[1L]],
-        as.character(y)[[-1L]], collapse = ""
-        ) else x <- y
-
-    rm(y)
+    x <- rlang::enexpr(x)
+    # y <- rlang::enexpr(x)
+    # if( as.character(y)[[1L]] == "?" ) x <- paste0(
+    #     as.character(y)[[1L]],
+    #     as.character(y)[[-1L]], collapse = ""
+    #     ) else x <- y
+    #
+    # rm(y)
+    print(class(x))
     S7::S7_dispatch()
 })
 
@@ -85,6 +88,8 @@ select_clause <- S7::new_generic("select_query", "x")
     } else return( FALSE )
 
 }
+
+
 
 #' @noRd
 #' @param rlang as_label is_symbol

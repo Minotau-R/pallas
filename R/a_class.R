@@ -13,7 +13,7 @@
 #'     (Default: `""`)
 #' @param ... additional arguments
 #' @importFrom S7 method<- class_name
-#' @seealso [predicate.formula()]
+#' @seealso [predicate-methods]
 #' @returns a `triple` object.
 #' @examples
 #' # a_class defines a triple:
@@ -23,13 +23,24 @@
 #' a_class(A, what = "type", prefix = "p")
 #' a_class(?A, what = "type", prefix = "p")
 #' a_class(p_A:A, what = "type", prefix = "p")
-#'
-S7::method(a_class, S7::class_name) <-
-    function(x, what, prefix = "") a_class.name(enexpr(x), what, prefix)
+NULL
 
 #' @export
-S7::method(a_class, S7::class_language) <-
-    function(x, what, prefix = "") a_class.name(enexpr(x), what, prefix)
+#' @importFrom S7 method<- class_call method
+S7::method(a_class, S7::class_call) <- function(x, what = "", prefix = "") {
+    x <- .Q2var(substitute(x))
+    x <- .colon2var(x)
+    triple(
+        subject = as.character(x),
+        predicate = c("", "a"),
+        object = c(prefix, what)
+    )
+}
+
+
+#' @export
+S7::method(a_class, S7::class_name) <- function(x, what, prefix = "")
+        a_class.name(rlang::enexpr(x), what, prefix)
 
 #' @export
 S7::method(a_class, S7::class_character) <-
@@ -39,9 +50,7 @@ S7::method(a_class, S7::class_character) <-
 #' @importFrom utils capture.output
 a_class.name <- function(x, what, prefix = "") {
 
-    if(is.name(y <- rlang::enexpr(x))) x <- y
-    rm(y)
-
+    x <- .Q2var(x)
     triple(
         subject = utils::capture.output(x),
         predicate = c("", "a"),
@@ -54,4 +63,16 @@ a_class.character <- function(x, what, prefix = "") triple(
     predicate = c("", "a"),
     object = c(prefix, what)
 )
+
+.colon2var <- function(x) {
+    if(is.call(x)) {
+        if(as.character(x)[[1L]] == ":") {
+            x <- c(
+                as.character(x[[2L]]),
+                as.character(x[[3L]])
+            )
+        }
+    }
+    return(x)
+}
 

@@ -34,7 +34,7 @@ vocabulary <- S7::new_class(
         P = S7::new_property(getter = function(self) self@lexicon$predicates),
         C = S7::new_property(getter = function(self) self@lexicon$classes),
 
-        prefix  = S7::new_property(getter = function(self) self[["prefix"]]),
+        prefix  = S7::new_property( getter = function(self) self[["prefix"]]),
         query   = S7::new_property( getter = function(self) self[["query"]]),
         where   = S7::new_property( getter = function(self) self[["where"]])
     ),
@@ -53,6 +53,17 @@ vocabulary <- S7::new_class(
             .parent = x,
             lexicon = lexicon
                         )
+    },
+    validator = function(self) {
+        ll <- vapply(self, is.vector, FALSE, USE.NAMES = TRUE)
+
+        if(!identical(names(ll), c("prefix", "query", "where")) ) {
+            "vocabulary list should only contain 'prefix', 'query' and 'where'."
+        }
+        if(!all(ll)){
+            paste0("Content of '", paste0(names(ll)[!ll], collapse = "', '"),
+                   "' must inherit from vector.")
+        }
     }
 )
 
