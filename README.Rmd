@@ -10,7 +10,7 @@ output: github_document
 [![R BiocCheck](https://github.com/Minotau-R/pallas/actions/workflows/test.yml/badge.svg)](https://github.com/Minotau-R/pallas/actions/workflows/test.yml)
 <!-- badges: end -->
 
-```{r, include = FALSE}
+```{r knitr-options, include = FALSE}
 knitr::opts_chunk$set(
     collapse = TRUE,
     comment = "#>",

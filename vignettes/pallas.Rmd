@@ -1,0 +1,38 @@
+---
+title: "pallas"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{pallas}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r knitr-options, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# 🦉 pallas: An R package to compose and query SPARQL. 
+
+## Introduction
+The `pallas` package allows users to query SPARQL endpoints from R. As composing
+SPARQL queries can be complicated, `pallas` also provides a set of utilities in 
+the S7 framework to assist the user. 
+
+## Installation instructions
+
+Get the latest stable `R` release from [CRAN](http://cran.r-project.org/). Then
+install `pallas` from [GitHub](https://github.com/minotau-R/pallas) 
+with `remotes`: 
+
+```{r, 'remotes-install', eval = FALSE}
+install.packages("remotes")
+remotes::install_github("minotau-R/pallas")
+```
+
+
+```{r setup}
+library(pallas)
+```
