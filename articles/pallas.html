@@ -80,6 +80,35 @@ to assist the user.</p>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"minotau-R/pallas"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://minotau-r.github.io/pallas/">pallas</a></span><span class="op">)</span></span></code></pre></div>
+<p>We can use <code><a href="../reference/building-queries.html">map_endpoint()</a></code> to take information about what
+SPARQL terms, namely classes and predicates, are defined at a given
+endpoint. <code><a href="../reference/building-queries.html">map_endpoint()</a></code> takes the URL of an endpoint as
+input and returns an object of the <code>OWL</code> S7 class.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">endpoint_url</span> <span class="op">&lt;-</span> <span class="st">"https://sparql.uniprot.org/"</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/building-queries.html">map_endpoint</a></span><span class="op">(</span><span class="va">endpoint_url</span><span class="op">)</span></span></code></pre></div>
+<p><code>OWL</code> objects contain <a href="https://www.w3.org/OWL/" class="external-link">Web Ontology Language</a> (OWL). A
+typical SPARQL query consists of at least three parts:</p>
+<ol style="list-style-type: decimal">
+<li>prefix declarations</li>
+<li>query type (SELECT, ASK, CONSTRUCT, DESCRIBE) and arguments</li>
+<li>WHERE clause This is also reflected in the <code>OWL</code>
+class:</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span></span>
+<span><span class="co">#&gt; pallas::OWL list S7_object.</span></span>
+<span><span class="co">#&gt; $prefix</span></span>
+<span><span class="co">#&gt; [1] "PREFIX core: &lt;http://purl.uniprot.org/core/&gt;"</span></span>
+<span><span class="co">#&gt; [2] "PREFIX x01: &lt;http://www.w3.org/2000/01/&gt;"    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $query</span></span>
+<span><span class="co">#&gt; list()</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $where</span></span>
+<span><span class="co">#&gt; list()</span></span>
+<span><span class="co">#&gt; No 'query' found. Add and define a query with `add_query()`.</span></span>
+<span><span class="co">#&gt; No 'where' found. Add where-clauses with `where_clause()`.</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
