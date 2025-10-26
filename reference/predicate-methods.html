@@ -19,7 +19,8 @@ predicate known by the endpoint."></head><body>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/pallas.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
       </ul></div>
@@ -77,21 +78,26 @@ predicate known by the endpoint.</p>
 <span class="r-in"><span>    prefix <span class="op">=</span> <span class="st">"prefix"</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pallas::triple character S7_object.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sub_prefix subject   prefix predicate   ob_prefix object </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> subject             predicate         object               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sub_prefix:subject  prefix:predicate  ob_prefix:object  .  </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># predicate() handles '?' symbols (Unlike regular formula objects).</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="predicate-generic.html">predicate</a></span><span class="op">(</span><span class="va">a</span><span class="op">:</span><span class="va">b</span><span class="op">~</span><span class="va">c</span><span class="op">:</span><span class="va">d</span>, what <span class="op">=</span> <span class="st">""</span>, prefix <span class="op">=</span> <span class="st">"pa"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pallas::triple character S7_object.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b   pa    c d </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> subject  predicate  object     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     a:b        pa:     c:d  .  </span>
 <span class="r-in"><span><span class="fu"><a href="predicate-generic.html">predicate</a></span><span class="op">(</span> <span class="op">?</span><span class="va">b</span><span class="op">~</span><span class="va">c</span><span class="op">:</span><span class="va">d</span>, what <span class="op">=</span> <span class="st">""</span>, prefix <span class="op">=</span> <span class="st">"b"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pallas::triple character S7_object.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ? b   b    c d </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> subject  predicate  object     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ?b         b:     c:d  .  </span>
 <span class="r-in"><span><span class="fu"><a href="predicate-generic.html">predicate</a></span><span class="op">(</span><span class="va">a</span><span class="op">:</span><span class="va">b</span><span class="op">~</span> <span class="op">?</span><span class="va">d</span>, what <span class="op">=</span> <span class="st">""</span>, prefix <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pallas::triple character S7_object.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a b   c    ? d </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> subject  predicate  object     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     a:b         c:      ?d  .  </span>
 <span class="r-in"><span><span class="fu"><a href="predicate-generic.html">predicate</a></span><span class="op">(</span> <span class="op">?</span><span class="va">b</span><span class="op">~</span> <span class="op">?</span><span class="va">d</span>, what <span class="op">=</span> <span class="st">""</span>, prefix <span class="op">=</span> <span class="st">"d"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pallas::triple character S7_object.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ? b   d    ? d </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> subject  predicate  object     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ?b         d:      ?d  .  </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

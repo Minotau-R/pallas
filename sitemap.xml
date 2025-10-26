@@ -1,6 +1,8 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://minotau-r.github.io/pallas/404.html</loc></url>
 <url><loc>https://minotau-r.github.io/pallas/LICENSE.html</loc></url>
+<url><loc>https://minotau-r.github.io/pallas/articles/index.html</loc></url>
+<url><loc>https://minotau-r.github.io/pallas/articles/pallas.html</loc></url>
 <url><loc>https://minotau-r.github.io/pallas/authors.html</loc></url>
 <url><loc>https://minotau-r.github.io/pallas/index.html</loc></url>
 <url><loc>https://minotau-r.github.io/pallas/reference/OWL-class.html</loc></url>
