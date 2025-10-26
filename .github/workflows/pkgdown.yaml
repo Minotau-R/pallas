@@ -2,7 +2,7 @@ name: build
 'on':
   push:
     branches:
-      - devel
+      - none
 env:
   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 jobs:

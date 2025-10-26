@@ -125,10 +125,11 @@ triple <- S7::new_class(
         if(length(object) == 1L) { object <- c("", object) }
         object <- .organiseQvars(object)
 
-        # TODO paste collapse on "" or ":"
-
-        x <- vapply(c(subject, predicate, object), .trip_paste, FUN.VALUE = "")
-        #x[is.na(x)] <- ""
+        x <- vapply(
+            list(subject = subject, predicate = predicate, object = object),
+            .trip_paste, FUN.VALUE = ""
+            )
+        x <- c(x, ".")
         S7::new_object(
             .parent = x,
             subject = subject,
