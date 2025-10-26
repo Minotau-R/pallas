@@ -1,6 +1,16 @@
 ^pallas\.Rproj$
+^.*\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
-^_pkgdown\.yml$
+^README\.Rmd$
+^README_files$
+^man-roxygen$
+^doc$
 ^docs$
+^Meta$
 ^pkgdown$
+^dev$
+^\.github$
+^\.air\.toml$
+^\.travis\.yml$
+^_pkgdown\.yml$
