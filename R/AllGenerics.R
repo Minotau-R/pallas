@@ -46,7 +46,6 @@ a_class <- S7::new_generic("a_class", "x", fun = function(x, ...) {
     #     ) else x <- y
     #
     # rm(y)
-    print(class(x))
     S7::S7_dispatch()
 })
 
@@ -56,7 +55,7 @@ a_class <- S7::new_generic("a_class", "x", fun = function(x, ...) {
 #' @param x An object.
 #' @param ... `Expression` or sequence of expression separated by comma's, that
 #'     each define an RDF triple for the where clause.
-#' @returns a `vocabulary` with the defined expressions included in the `where`
+#' @returns a `OWL` with the defined expressions included in the `where`
 #'     slot.
 #' @export
 #'
@@ -67,7 +66,7 @@ where_clause <- S7::new_generic("where_clause", "x")
 #' @rdname select_query-queries
 #' @param x An object.
 #' @param ... `Expression` the SELECT statement.
-#' @returns a `vocabulary` with the defined expressions included in the `query`
+#' @returns a `OWL` with the defined expressions included in the `query`
 #'     slot.
 #' @export
 #'

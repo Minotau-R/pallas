@@ -2,7 +2,7 @@
 % Please edit documentation in R/map_endpoint.R, R/where_clause.R
 \name{map_endpoint}
 \alias{map_endpoint}
-\alias{where_clause.vocabulary}
+\alias{where_clause.OWL}
 \title{Map out a SPARQL endpoint.}
 \usage{
 map_endpoint(endpoint_url, strip.blank = TRUE, return.table = FALSE)

@@ -1,7 +1,7 @@
-#' @title Methods for `vocabulary` class.
-#' @rdname vocabulary-methods
-#' @name vocabulary-methods
-#' @param x `vocabulary`.
+#' @title Methods for `OWL` class.
+#' @rdname OWL-methods
+#' @name OWL-methods
+#' @param x `OWL`.
 #' @param pattern `Character scalar`. Pattern to look for.
 #' @return the name of the extra data slot
 NULL
@@ -11,7 +11,7 @@ NULL
 
 #' @export
 #'
-S7::method(print, vocabulary) <- function(x, ...) {
+S7::method(print, OWL) <- function(x, ...) {
     cat(
         paste0(paste(class(x), collapse = " "), ".\n")
     )
@@ -33,17 +33,17 @@ S7::method(print, vocabulary) <- function(x, ...) {
 
 #' @export
 #'
-S7::method(.DollarNames, vocabulary) <- function(
+S7::method(.DollarNames, OWL) <- function(
         x, pattern = ""
-        ) `.DollarNames.pallas::vocabulary`(x, pattern)
+        ) `.DollarNames.pallas::OWL`(x, pattern)
 
 #' @importFrom utils .DollarNames
 #'
-`.DollarNames.pallas::vocabulary` <- function(x, pattern = "") {
+`.DollarNames.pallas::OWL` <- function(x, pattern = "") {
     grep( pattern, c("C", "P"), value = TRUE )
 }
 
-S7::method(`$`, vocabulary) <- function(object, name) S7::prop(object, name)
+S7::method(`$`, OWL) <- function(object, name) S7::prop(object, name)
 
 .prefix_to_SPARQL <- function(x) {
     if(is.null(x)) {return(list())}

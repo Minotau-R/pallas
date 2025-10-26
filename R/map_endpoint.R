@@ -81,7 +81,7 @@ WHERE {
     class_list <-
         mapply(a_class_factory, class_list, names(class_list), SIMPLIFY = FALSE)
 
-    vocabulary(
+    OWL(
         lexicon = list(
             predicates = pred_list, classes = class_list, prefix_table = pre_tab
             ),

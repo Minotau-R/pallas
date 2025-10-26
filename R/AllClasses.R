@@ -1,8 +1,8 @@
 #' S7 class to contain a SPARQL query.
-#' @name vocabulary
-#' @rdname vocabulary-class
+#' @name OWL
+#' @rdname OWL-class
 #' @description
-#' `vocabulary` is an S7 class to compose and manage `SPARQL` queries.
+#' `OWL` is an S7 class to compose and manage `SPARQL` queries.
 #' @slot lexicon `Named list`. Contains convenience functions, for instance
 #'     those generated from `map_endpoint()`
 #' @slot prefix `Named list of character scalars`, where values are long-form
@@ -19,14 +19,14 @@
 #'     query form (SELECT, ASK, DESCRIBE), and the second indicating the content
 #'     of the query itself.
 #' @param where `List` of triples
-#' @returns a `vocabulary` object.
+#' @returns a `OWL` object.
 #' @importFrom S7 new_class class_list new_property new_object
 #' @examples
-#' vocabulary()
+#' OWL()
 #' @export
 #'
-vocabulary <- S7::new_class(
-    "vocabulary",
+OWL <- S7::new_class(
+    "OWL",
     package = "pallas",
     parent = S7::class_list,
     properties  = list(
@@ -58,7 +58,7 @@ vocabulary <- S7::new_class(
         ll <- vapply(self, is.vector, FALSE, USE.NAMES = TRUE)
 
         if(!identical(names(ll), c("prefix", "query", "where")) ) {
-            "vocabulary list should only contain 'prefix', 'query' and 'where'."
+            "OWL list should only contain 'prefix', 'query' and 'where'."
         }
         if(!all(ll)){
             paste0("Content of '", paste0(names(ll)[!ll], collapse = "', '"),
@@ -103,15 +103,9 @@ triple <- S7::new_class(
     package = "pallas",
     parent = S7::class_character,
     properties = list(
-        subject   = S7::new_property(
-            getter = function(self) S7::S7_data(self)[c(1L, 2L)]
-        ),
-        predicate = S7::new_property(
-            getter = function(self) S7::S7_data(self)[c(3L, 4L)]
-        ),
-        object    = S7::new_property(
-            getter = function(self) S7::S7_data(self)[c(5L, 6L)]
-        )
+        subject   = S7::new_property( getter = function(self) self@subject ),
+        predicate = S7::new_property( getter = function(self) self@predicate ),
+        object    = S7::new_property( getter = function(self) self@object )
     ),
     constructor = function(
         subject = c("", ""), predicate = c("", ""), object = c("", "")
@@ -131,12 +125,23 @@ triple <- S7::new_class(
         if(length(object) == 1L) { object <- c("", object) }
         object <- .organiseQvars(object)
 
-        x <- c( subject[c(1L, 2L)], predicate[c(1L, 2L)], object[c(1L, 2L)] )
-        x[is.na(x)] <- ""
-        S7::new_object( .parent = x )
+        # TODO paste collapse on "" or ":"
+
+        x <- vapply(c(subject, predicate, object), .trip_paste, FUN.VALUE = "")
+        #x[is.na(x)] <- ""
+        S7::new_object(
+            .parent = x,
+            subject = subject,
+            predicate = predicate,
+            object = object
+            )
     }
 )
 
+.trip_paste <- function(x) {
+    collapse <- if( x[1] %in% c("", "?") ) "" else ":"
+    paste0(x, collapse = collapse)
+}
 
 #' S7 class to mark domain-specific helper functions.
 #' @name term

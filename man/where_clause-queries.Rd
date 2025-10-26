@@ -13,7 +13,7 @@ where_clause(x, ...)
 each define an RDF triple for the where clause.}
 }
 \value{
-a \code{vocabulary} with the defined expressions included in the \code{where}
+a \code{OWL} with the defined expressions included in the \code{where}
 slot.
 }
 \description{

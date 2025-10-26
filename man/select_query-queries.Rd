@@ -13,7 +13,7 @@ select_clause(x, ...)
 \item{...}{\code{Expression} the SELECT statement.}
 }
 \value{
-a \code{vocabulary} with the defined expressions included in the \code{query}
+a \code{OWL} with the defined expressions included in the \code{query}
 slot.
 }
 \description{
