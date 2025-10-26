@@ -1,1 +1,31 @@
-# pallas 
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+<!-- badges: start -->
+
+[![GitHub
+issues](https://img.shields.io/github/issues/Minotau-R/pallas)](https://github.com/Minotau-R/pallas/issues)
+[![GitHub
+pulls](https://img.shields.io/github/issues-pr/Minotau-R/pallas)](https://github.com/Minotau-R/pallas/pulls)
+[![R
+BiocCheck](https://github.com/Minotau-R/pallas/actions/workflows/test.yml/badge.svg)](https://github.com/Minotau-R/pallas/actions/workflows/test.yml)
+<!-- badges: end -->
+
+# 🦉 pallas: An R package to compose and query SPARQL.
+
+## Introduction
+
+The `pallas` package allows users to query SPARQL endpoints from R. As
+composing SPARQL queries can be complicated, `pallas` also provides a
+set of utilities in the S7 framework to assist the user.
+
+## Installation instructions
+
+Get the latest stable `R` release from
+[CRAN](http://cran.r-project.org/). Then install `pallas` from
+[GitHub](https://github.com/minotau-R/pallas) with `remotes`:
+
+``` r
+install.packages("remotes")
+remotes::install_github("minotau-R/pallas")
+```

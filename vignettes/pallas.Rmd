@@ -36,3 +36,24 @@ remotes::install_github("minotau-R/pallas")
 ```{r setup}
 library(pallas)
 ```
+
+We can use `map_endpoint()` to take information about what SPARQL terms, namely 
+classes and predicates, are defined at a given endpoint. `map_endpoint()` takes 
+the URL of an endpoint as input and returns an object of the `OWL` S7 class.
+
+```{r map-endpoint, cache = TRUE}
+endpoint_url <- "https://sparql.uniprot.org/"
+x <- map_endpoint(endpoint_url)
+```
+
+`OWL` objects contain [Web Ontology Language](https://www.w3.org/OWL/) (OWL). A 
+typical SPARQL query consists of at least three parts: 
+
+1. prefix declarations
+2. query type (SELECT, ASK, CONSTRUCT, DESCRIBE) and arguments
+3. WHERE clause
+This is also reflected in the `OWL` class: 
+
+```{r show-OWL}
+x
+```

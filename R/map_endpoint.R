@@ -53,7 +53,7 @@ WHERE {
 
     all_URIs  <- unique(unlist(URIs, use.names = FALSE))
 
-    if(strip.blank) all_URIs <- all_URIs[all_URIs != "_"]
+    if(strip.blank) { all_URIs <- all_URIs[all_URIs != "_"] }
 
     pre_tab <- .make_prefix_table(all_URIs)
 
