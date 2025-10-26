@@ -14,7 +14,7 @@
 #' @examples
 #' # Don't query endpoints unintentionally.
 #' if(FALSE) {
-#'     x <- map_endpoint("https://sparql.uniprot.org/")
+#'     x <- map_endpoint(endpoint_url = "https://sparql.uniprot.org/")
 #'         x |> where_clause()
 #' }
 #'
@@ -29,9 +29,10 @@ SELECT ?domain ?range ?property
 WHERE {
     ?property rdf:type owl:ObjectProperty .
     ?property rdfs:range ?range .
-    ?property rdfs:domain ?domain
+    ?property rdfs:domain ?domain .
 }"
     x <- send_query(query, endpoint_url, out_format = "text/csv")
+    stopifnot("Server did not return data. " =  NCOL(x) == 3L)
     if(strip.blank) x <- .not_between_blanks(x)
 
     if(return.table) {return(x)}

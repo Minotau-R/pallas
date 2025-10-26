@@ -25,7 +25,7 @@ Fetch information about known relational information from a sparql endpoint.
 \examples{
 # Don't query endpoints unintentionally.
 if(FALSE) {
-    x <- map_endpoint("https://sparql.uniprot.org/")
+    x <- map_endpoint(endpoint_url = "https://sparql.uniprot.org/")
         x |> where_clause()
 }
 

@@ -8,38 +8,45 @@
 #'
 #' @export
 #'
-send_query <- function(query, endpoint_url, out_format = "text/csv") {
+send_query <- function(
+        query, path = "sparql/", endpoint_url, out_format = "text/csv"
+        ) {
     stopifnot(
         "Arg 'endpoint_url' must be a valid URL." = .is_valid_URL(endpoint_url)
     )
-    query <- .build_SPARQL(query, endpoint_url)
-    .query_SPARQL(query, out_format)
+    .query_SPARQL(
+        url = endpoint_url, path = path, query = query, out_format = out_format
+        )
 }
 
 #' @importFrom utils URLencode
 #' @noRd
 #'
-.build_SPARQL <- function(query, endpoint_url) {
+.SPARQLencode <- function(query) {
     query <- gsub("\\+", "%2B", utils::URLencode(query, reserved = TRUE))
-    query <- paste0(endpoint_url, "?query=", query)
     return(query)
 }
 
-#' @importFrom httr content GET timeout add_headers
+#' @importFrom httr content GET accept
 #' @importFrom utils read.csv
 #' @param query `Character scalar`. Full query url.
 #' @noRd
 #'
-.query_SPARQL <- function(query, out_format = "text/csv") {
+.query_SPARQL <- function(url, path, query, out_format = "text/csv") {
+    query <- .SPARQLencode(query)
+
+    url <- httr::parse_url(url)
+    url$path <- path
+    url$query <- list(query = I(query))
+    url <- httr::build_url(url)
+
 
     result <- httr::content(
         httr::GET(
-            query,
-            httr::add_headers(c(Accept = out_format))
-        ),
-        "text", encoding = "UTF-8"
+            url,
+            httr::accept(out_format)
+            ), as = "text", encoding = "UTF-8"
     )
-
     utils::read.csv(textConnection(result), stringsAsFactors = TRUE)
 }
 
@@ -55,3 +62,25 @@ send_query <- function(query, endpoint_url, out_format = "text/csv") {
     )
 }
 
+
+# Adapted from UniProt.ws utilities.R
+#' @importFrom BiocFileCache BiocFileCache bfcneedsupdate bfcrpath bfcdownload
+#' @importFrom tools R_user_dir
+.getCache <- function(url) {
+
+    cache <- tools::R_user_dir("pallas", "cache")
+
+    bfc <- BiocFileCache::BiocFileCache(cache, ask = FALSE)
+
+    rpath <- BiocFileCache::bfcrpath(
+        bfc, rnames = url, exact = TRUE, download = TRUE, rtype = "web"
+    )
+
+    to.update <- BiocFileCache::bfcneedsupdate(bfc, names(rpath))
+
+    if( to.update ){
+        BiocFileCache::bfcdownload(bfc, names(rpath), ask = FALSE)
+    }
+
+    return(rpath)
+}

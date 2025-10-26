@@ -4,7 +4,7 @@
 \alias{send_query}
 \title{Send a SPARWL query to an endpoint.}
 \usage{
-send_query(query, endpoint_url, out_format = "text/csv")
+send_query(query, path = "sparql/", endpoint_url, out_format = "text/csv")
 }
 \arguments{
 \item{query}{\verb{Character scalar} SPARQL query content.}
