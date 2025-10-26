@@ -66,11 +66,16 @@ a_class.character <- function(x, what, prefix = "") triple(
 
 .colon2var <- function(x) {
     if(is.call(x)) {
-        if(as.character(x)[[1L]] == ":") {
-            x <- c(
-                as.character(x[[2L]]),
-                as.character(x[[3L]])
-            )
+        if( as.character(x)[1L] %in% c(":", "c", "~") ) {
+            x1 <- as.character(x)[2L]
+            x2 <- as.character(x)[3L]
+
+            if( is.na(x2) ) {
+                x2 <- x1
+                x1 <- ""
+            }
+            x <- c( x1, x2 )
+
         }
     }
     return(x)
