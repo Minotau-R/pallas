@@ -9,7 +9,7 @@
 #' @export
 #'
 send_query <- function(
-        query, path = "sparql/", endpoint_url, out_format = "text/csv"
+        endpoint_url, query, path = "sparql/", out_format = "text/csv"
         ) {
     stopifnot(
         "Arg 'endpoint_url' must be a valid URL." = .is_valid_URL(endpoint_url)

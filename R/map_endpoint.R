@@ -31,7 +31,10 @@ WHERE {
     ?property rdfs:range ?range .
     ?property rdfs:domain ?domain .
 }"
-    x <- send_query(query, endpoint_url, out_format = "text/csv")
+    x <- send_query(
+        endpoint_url = endpoint_url, query = query,
+        path = "sparql/", out_format = "text/csv"
+        )
     stopifnot("Server did not return data. " =  NCOL(x) == 3L)
     if(strip.blank) x <- .not_between_blanks(x)
 

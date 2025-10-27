@@ -11,9 +11,10 @@ Description: An S7-based R package to construct OWL/SPARQL expressions and query
     SPARQL endpoints from R. 
 Imports:
     S7,
-    rlang, 
-    httr, 
-    stats
+    rlang,
+    stats,
+    httr,
+    BiocFileCache
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
