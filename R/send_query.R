@@ -42,14 +42,25 @@ send_query <- function(
     url$query <- list(query = I(query))
     url <- httr::build_url(url)
 
-
-    result <- httr::content(
-        httr::GET(
-            url,
-            httr::accept(out_format)
+    # Check if cache for key already exists
+    cache.path <- .getCache(url)
+    # If cache exists, read it
+    if (file.exists(cache.path)) {
+        result <- read.csv(cache.path, stringsAsFactors = TRUE)
+    # If cache does not exist, make GET request
+    } else {
+        result <- httr::content(
+            httr::GET(
+                url,
+                httr::accept(out_format)
             ), as = "text", encoding = "UTF-8"
-    )
-    utils::read.csv(textConnection(result), stringsAsFactors = TRUE)
+        )
+        # Read result from connection
+        result <- read.csv(textConnection(result), stringsAsFactors = TRUE)
+        # Save result to cache
+        write.csv(result, file = cache.path, row.names = FALSE)
+    }
+    return(result)
 }
 
 
@@ -68,24 +79,18 @@ send_query <- function(
 # Adapted from UniProt.ws utilities.R
 #' @importFrom BiocFileCache BiocFileCache bfcneedsupdate bfcrpath bfcdownload
 #' @importFrom tools R_user_dir
-#' @importFrom rlang hash
+#' @importFrom digest digest
 .getCache <- function(url) {
 
     cache <- tools::R_user_dir("pallas", "cache")
-
     bfc <- BiocFileCache::BiocFileCache(cache, ask = FALSE)
 
-    # url_hash <- rlang::hash(url)
-
+    # Generate a hash as a unique cache key
+    key <- digest(url, algo = "sha256")
+    
     rpath <- BiocFileCache::bfcrpath(
-        bfc, rnames = url, exact = TRUE, download = TRUE, rtype = "web"
+        bfc, rnames = key, exact = TRUE, download = FALSE, rtype = "web"
     )
-
-    to.update <- BiocFileCache::bfcneedsupdate(bfc, names(rpath))
-
-    if( to.update ){
-        BiocFileCache::bfcdownload(bfc, names(rpath), ask = FALSE)
-    }
 
     return(rpath)
 }

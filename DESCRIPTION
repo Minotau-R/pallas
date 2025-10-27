@@ -1,6 +1,6 @@
 Package: pallas
 Title: Construct Web Ontology Language (OWL) and query SPARQL endpoints from R
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: c(
     person("Thomaz", "Bastiaanssen", email = "thomazbastiaanssen@gmail.com", 
         role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X")),
@@ -14,7 +14,8 @@ Imports:
     rlang,
     stats,
     httr,
-    BiocFileCache
+    BiocFileCache,
+    digest
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
