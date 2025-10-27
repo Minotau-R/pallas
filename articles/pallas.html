@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">pallas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,8 @@ endpoint. <code><a href="../reference/building-queries.html">map_endpoint()</a><
 input and returns an object of the <code>OWL</code> S7 class.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">endpoint_url</span> <span class="op">&lt;-</span> <span class="st">"https://sparql.uniprot.org/"</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/building-queries.html">map_endpoint</a></span><span class="op">(</span><span class="va">endpoint_url</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/building-queries.html">map_endpoint</a></span><span class="op">(</span><span class="va">endpoint_url</span><span class="op">)</span></span>
+<span><span class="co">#&gt; adding rname '5e918bfe31a47685419ba31861ec8b48ec502dbd71a767e0b138d60c40148804'</span></span></code></pre></div>
 <p><code>OWL</code> objects contain <a href="https://www.w3.org/OWL/" class="external-link">Web Ontology Language</a> (OWL). A
 typical SPARQL query consists of at least three parts:</p>
 <ol style="list-style-type: decimal">
