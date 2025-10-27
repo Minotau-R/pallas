@@ -2,9 +2,11 @@
 #' @name send_query
 #' @description
 #' Query a SPARQL endpoint with SPARQL.
-#' @param query `Character scalar` SPARQL query content.
-#' @param out_format `Character scalar`. (Default: `"text/csv"`.)
 #' @param endpoint_url `Character scalar` sparql endpoint url.
+#' @param query `Character scalar` SPARQL query content.
+#' @param path `Character scalar` Optional. Path from endpoint to query.
+#'     (Default: `'sparql/'`)
+#' @param out_format `Character scalar`. (Default: `"text/csv"`.)
 #'
 #' @export
 #'
@@ -66,11 +68,14 @@ send_query <- function(
 # Adapted from UniProt.ws utilities.R
 #' @importFrom BiocFileCache BiocFileCache bfcneedsupdate bfcrpath bfcdownload
 #' @importFrom tools R_user_dir
+#' @importFrom rlang hash
 .getCache <- function(url) {
 
     cache <- tools::R_user_dir("pallas", "cache")
 
     bfc <- BiocFileCache::BiocFileCache(cache, ask = FALSE)
+
+    # url_hash <- rlang::hash(url)
 
     rpath <- BiocFileCache::bfcrpath(
         bfc, rnames = url, exact = TRUE, download = TRUE, rtype = "web"

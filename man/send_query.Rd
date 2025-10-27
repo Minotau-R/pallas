@@ -11,6 +11,9 @@ send_query(endpoint_url, query, path = "sparql/", out_format = "text/csv")
 
 \item{query}{\verb{Character scalar} SPARQL query content.}
 
+\item{path}{\verb{Character scalar} Optional. Path from endpoint to query.
+(Default: \code{'sparql/'})}
+
 \item{out_format}{\verb{Character scalar}. (Default: \code{"text/csv"}.)}
 }
 \description{
