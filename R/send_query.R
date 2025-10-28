@@ -29,8 +29,8 @@ send_query <- function(
     return(query)
 }
 
-#' @importFrom httr content GET accept
-#' @importFrom utils read.csv
+#' @importFrom httr content GET accept parse_url build_url
+#' @importFrom utils read.csv write.csv
 #' @param query `Character scalar`. Full query url.
 #' @noRd
 #'
@@ -46,7 +46,7 @@ send_query <- function(
     cache.path <- .getCache(url)
     # If cache exists, read it
     if (file.exists(cache.path)) {
-        result <- read.csv(cache.path, stringsAsFactors = TRUE)
+        result <- utils::read.csv(cache.path, stringsAsFactors = TRUE)
     # If cache does not exist, make GET request
     } else {
         result <- httr::content(
@@ -58,7 +58,7 @@ send_query <- function(
         # Read result from connection
         result <- read.csv(textConnection(result), stringsAsFactors = TRUE)
         # Save result to cache
-        write.csv(result, file = cache.path, row.names = FALSE)
+        utils::write.csv(result, file = cache.path, row.names = FALSE)
     }
     return(result)
 }
@@ -87,7 +87,7 @@ send_query <- function(
 
     # Generate a hash as a unique cache key
     key <- digest(url, algo = "sha256")
-    
+
     rpath <- BiocFileCache::bfcrpath(
         bfc, rnames = key, exact = TRUE, download = FALSE, rtype = "web"
     )

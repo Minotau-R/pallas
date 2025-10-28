@@ -84,11 +84,15 @@ WHERE {
     class_list <- class_list[lengths(class_list) != 0L]
     class_list <-
         mapply(a_class_factory, class_list, names(class_list), SIMPLIFY = FALSE)
+    lexicon <- list(
+        P = OWL_env(Reduce(c, pred_list)),
+        C = OWL_env(Reduce(c, class_list)),
+        V = character(0L),
+        prefixes = pre_tab
+    )
 
     OWL(
-        lexicon = list(
-            predicates = pred_list, classes = class_list, prefix_table = pre_tab
-            ),
+        .env   = lexicon,
         prefix = .prefix_to_SPARQL(pre_tab)
     )
 }

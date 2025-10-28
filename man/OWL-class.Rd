@@ -4,10 +4,16 @@
 \alias{OWL}
 \title{S7 class to contain a SPARQL query.}
 \usage{
-OWL(lexicon = list(), prefix = list(), query = list(), where = list())
+OWL(
+  .env = list(P = OWL_env(list()), C = OWL_env(list()), V = character(0L), prefixes =
+    data.frame()),
+  prefix = list(),
+  query = list(),
+  where = list()
+)
 }
 \arguments{
-\item{lexicon}{\verb{Named list}. Contains convenience functions, for instance
+\item{.env}{\verb{Named list}. Contains convenience functions, for instance
 those generated from \code{map_endpoint()}}
 
 \item{prefix}{\verb{Named list of character scalars}, where values are long-form
@@ -28,7 +34,7 @@ a \code{OWL} object.
 \section{Slots}{
 
 \describe{
-\item{\code{lexicon}}{\verb{Named list}. Contains convenience functions, for instance
+\item{\code{.env}}{\verb{Named list}. Contains convenience functions, for instance
 those generated from \code{map_endpoint()}}
 
 \item{\code{prefix}}{\verb{Named list of character scalars}, where values are long-form

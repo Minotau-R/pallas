@@ -1,9 +1,40 @@
+#' S7 class to contain an OWL environment.
+#' @name OWL_env
+#' @rdname OWL_env-class
+#' @description
+#' `OWL_env` is an S7 class which is typically slotted into `OWL` objects to
+#' serve as a context, an environment, in which to keep track of the "non-SPARQL
+#' query code" parts of the `OWL` object. This includes custom triple generating
+#' functions (`term`s), but also the variables named in the query so far.
+#'
+#' @param x `List` object.
+#' @returns an `OWL_env` object.
+#' @importFrom S7 class_character new_property new_object S7_data
+#' @examples
+#' OWL_env
+#'
+#' @export
+#'
+OWL_env <- S7::new_class(
+    "OWL_env",
+    package = "pallas",
+    parent = S7::class_list,
+
+    constructor = function( x ) {
+        x <- as.list(x)
+        stopifnot("'x' should be (coercible to) a list." = inherits(x, "list"))
+        S7::new_object(
+            .parent = x
+        )
+    }
+)
+
 #' S7 class to contain a SPARQL query.
 #' @name OWL
 #' @rdname OWL-class
 #' @description
 #' `OWL` is an S7 class to compose and manage `SPARQL` queries.
-#' @slot lexicon `Named list`. Contains convenience functions, for instance
+#' @slot .env `Named list`. Contains convenience functions, for instance
 #'     those generated from `map_endpoint()`
 #' @slot prefix `Named list of character scalars`, where values are long-form
 #'     and names are the corresponding abbreviation.
@@ -11,7 +42,7 @@
 #'     query form (SELECT, ASK, DESCRIBE), and the second indicating the content
 #'      of the query itself.
 #' @slot where `List` of triples
-#' @param lexicon `Named list`. Contains convenience functions, for instance
+#' @param .env `Named list`. Contains convenience functions, for instance
 #'     those generated from `map_endpoint()`
 #' @param prefix `Named list of character scalars`, where values are long-form
 #'     and names are the corresponding abbreviation.
@@ -20,7 +51,7 @@
 #'     of the query itself.
 #' @param where `List` of triples
 #' @returns a `OWL` object.
-#' @importFrom S7 new_class class_list new_property new_object
+#' @importFrom S7 new_class class_list new_property new_object S7_data
 #' @examples
 #' OWL()
 #' @export
@@ -30,16 +61,22 @@ OWL <- S7::new_class(
     package = "pallas",
     parent = S7::class_list,
     properties  = list(
-        lexicon = S7::class_list,
-        P = S7::new_property(getter = function(self) self@lexicon$predicates),
-        C = S7::new_property(getter = function(self) self@lexicon$classes),
+        .env = S7::class_list,
+        P = S7::new_property(getter = function(self) self@.env$P),
+        C = S7::new_property(getter = function(self) self@.env$C),
+        V = S7::new_property(getter = function(self) self@.env$V),
 
-        prefix  = S7::new_property( getter = function(self) self[["prefix"]]),
-        query   = S7::new_property( getter = function(self) self[["query"]]),
-        where   = S7::new_property( getter = function(self) self[["where"]])
+        prefix  = S7::new_property( getter = function(self) S7::S7_data(self)[["prefix"]]),
+        query   = S7::new_property( getter = function(self) S7::S7_data(self)[["query"]]),
+        where   = S7::new_property( getter = function(self) S7::S7_data(self)[["where"]])
     ),
     constructor = function(
-        lexicon = list(),
+        .env = list(
+            P = OWL_env(list()),
+            C = OWL_env(list()),
+            V = character(0L),
+            prefixes = data.frame()
+        ),
         prefix = list(),
         query = list(),
         where = list()
@@ -49,13 +86,15 @@ OWL <- S7::new_class(
             query = query,
             where = where
         )
+        .env <- .env[c("P", "C", "V", "prefixes")]
         S7::new_object(
             .parent = x,
-            lexicon = lexicon
+            .env = .env
                         )
     },
     validator = function(self) {
-        ll <- vapply(self, is.vector, FALSE, USE.NAMES = TRUE)
+        .self <- S7::S7_data(self)
+        ll <- vapply(.self, is.vector, FALSE, USE.NAMES = TRUE)
 
         if(!identical(names(ll), c("prefix", "query", "where")) ) {
             "OWL list should only contain 'prefix', 'query' and 'where'."
@@ -64,8 +103,12 @@ OWL <- S7::new_class(
             paste0("Content of '", paste0(names(ll)[!ll], collapse = "', '"),
                    "' must inherit from vector.")
         }
+        if(!identical(sort(names(self@.env)),  c("C", "P", "prefixes", "V"))) {
+            "names of '.env' must be exactly c('C', 'P', 'prefixes', 'V'). "
+        }
     }
 )
+
 
 #' S7 class to contain an RDF triple.
 #' @name triple
@@ -165,7 +208,8 @@ triple <- S7::new_class(
 term <- S7::new_class(
     "term",
     package = "pallas",
-    parent = S7::class_function, properties = list(hint = S7::class_character),
+    parent = S7::class_function,
+    properties = list(hint = S7::class_character),
     constructor = function(x, hint = "")
         S7::new_object(
             .parent = x,

@@ -1,0 +1,51 @@
+#' @title Column names for RStudio auto-complete
+#' @name tbl_vars.OWL_env
+#' @aliases tbl_vars.OWL_env
+#' @description
+#' Returns the names OWL_env content. Needed for RStudio to complete variable
+#' names
+#' @param x `OWL_env`.
+#' @returns The names of content within `OWL_env` object `x`.
+NULL
+
+#' @export
+#'
+S7::method(tbl_vars, OWL_env)  <- function(x) `tbl_vars.pallas::OWL_env`(x)
+
+#' @export
+#' @importFrom dplyr tbl_vars group_vars
+#'
+`tbl_vars.pallas::OWL_env` <- function(x) {
+    names(x)
+}
+
+#' @export
+#' @importFrom dplyr tbl_vars group_vars
+#'
+S7::method(group_vars, OWL_env) <- function(x) `group_vars.pallas::OWL_env`(x)
+
+#' @export
+#'
+`group_vars.pallas::OWL_env` <- function(x) {
+    # Cannot group in OWL_env context.
+    list()
+}
+
+#' @export
+#'
+S7::method(tbl_vars, OWL) <- function(x) `tbl_vars.pallas::OWL`(x)
+
+#' @export
+#'
+`tbl_vars.pallas::OWL` <- function(x) c("C", "P")
+
+#' @export
+#'
+S7::method(group_vars, OWL) <- function(x) `group_vars.pallas::OWL`(x)
+
+#' @export
+#'
+`group_vars.pallas::OWL` <- function(x) {
+    # Cannot group in OWL context.
+    list()
+}

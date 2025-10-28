@@ -45,6 +45,18 @@ S7::method(.DollarNames, OWL) <- function(
 
 S7::method(`$`, OWL) <- function(object, name) S7::prop(object, name)
 
+S7::method(length, OWL) <- function(x) length(c("C" = 1, "P" = 2))
+
+
+local({
+    S7::method(`[[`, OWL) <- function(x, i) {
+        idx <- c("C" = 1, "P" = 2)
+        name <- names(idx)[[idx[[i]]]]
+        S7::prop(x, name)
+    }
+})
+
+
 .prefix_to_SPARQL <- function(x) {
     if(is.null(x)) {return(list())}
     paste0( "PREFIX ", apply(x, 1L, paste0, collapse = ": <"), ">" )
