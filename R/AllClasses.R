@@ -103,8 +103,8 @@ OWL <- S7::new_class(
             paste0("Content of '", paste0(names(ll)[!ll], collapse = "', '"),
                    "' must inherit from vector.")
         }
-        if(!identical(sort(names(self@.env)),  c("C", "P", "prefixes", "V"))) {
-            "names of '.env' must be exactly c('C', 'P', 'prefixes', 'V'). "
+        if( !all(names(self@.env) %in% c("C", "P", "prefixes", "V")) ) {
+            "names of '.env' must contain exactly c('C', 'P', 'prefixes', 'V')."
         }
     }
 )
