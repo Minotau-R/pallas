@@ -41,9 +41,9 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">OWL</span><span class="op">(</span></span>
 <span>  .env <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>P <span class="op">=</span> <span class="fu"><a href="OWL_env-class.html">OWL_env</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, C <span class="op">=</span> <span class="fu"><a href="OWL_env-class.html">OWL_env</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, V <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0L</span><span class="op">)</span>, prefixes <span class="op">=</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  prefix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  where <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  prefix <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  query <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  where <span class="op">=</span> <span class="st">""</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -84,19 +84,9 @@ of the query itself.</p></dd>
 those generated from <code><a href="building-queries.html">map_endpoint()</a></code></p></dd>
 
 
-<dt><code>prefix</code></dt>
-<dd><p><code>Named list of character scalars</code>, where values are long-form
-and names are the corresponding abbreviation.</p></dd>
-
-
-<dt><code>query</code></dt>
-<dd><p><code>Named list</code> of character vectors, with first element indicating
-query form (SELECT, ASK, DESCRIBE), and the second indicating the content
-of the query itself.</p></dd>
-
-
-<dt><code>where</code></dt>
-<dd><p><code>List</code> of triples</p></dd>
+<dt><code>sparql.</code></dt>
+<dd><p><code>Named list</code>. Contains SPARQL code in three sections:
+<code>prefix</code>, <code>query</code> and <code>where</code>.</p></dd>
 
 
 </dl></div>
@@ -104,19 +94,16 @@ of the query itself.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">OWL</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pallas::OWL list S7_object.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pallas::OWL tbl S7_object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $prefix</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $query</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $where</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No 'prefix' found. Add one or more prefixes with `add_prefix()`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No 'query' found. Add and define a query with `add_query()`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No 'where' found. Add where-clauses with `where_clause()`.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
