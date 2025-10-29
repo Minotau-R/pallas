@@ -90,7 +90,6 @@ WHERE {
         V = character(0L),
         prefixes = pre_tab
     )
-
     OWL(
         .env   = lexicon,
         prefix = .prefix_to_SPARQL(pre_tab)

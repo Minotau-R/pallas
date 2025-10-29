@@ -8,6 +8,12 @@
 #' @returns The names of content within `OWL_env` object `x`.
 NULL
 
+method(dimnames, OWL_env) <- function(x) list("term", names(x))
+method(dim, OWL_env) <- function(x) lengths(dimnames(x))
+method(`[`, OWL_env) <- function(x, i, j, drop = TRUE) `[[`(S7::S7_data(x), i)
+method(`print`, OWL_env) <- function(x, ...) print(S7::S7_data(x), ...)
+
+
 #' @export
 #'
 S7::method(tbl_vars, OWL_env)  <- function(x) `tbl_vars.pallas::OWL_env`(x)
@@ -31,21 +37,4 @@ S7::method(group_vars, OWL_env) <- function(x) `group_vars.pallas::OWL_env`(x)
     list()
 }
 
-#' @export
-#'
-S7::method(tbl_vars, OWL) <- function(x) `tbl_vars.pallas::OWL`(x)
 
-#' @export
-#'
-`tbl_vars.pallas::OWL` <- function(x) c("C", "P")
-
-#' @export
-#'
-S7::method(group_vars, OWL) <- function(x) `group_vars.pallas::OWL`(x)
-
-#' @export
-#'
-`group_vars.pallas::OWL` <- function(x) {
-    # Cannot group in OWL context.
-    list()
-}

@@ -7,9 +7,9 @@
 OWL(
   .env = list(P = OWL_env(list()), C = OWL_env(list()), V = character(0L), prefixes =
     data.frame()),
-  prefix = list(),
-  query = list(),
-  where = list()
+  prefix = "",
+  query = "",
+  where = ""
 )
 }
 \arguments{
@@ -37,14 +37,8 @@ a \code{OWL} object.
 \item{\code{.env}}{\verb{Named list}. Contains convenience functions, for instance
 those generated from \code{map_endpoint()}}
 
-\item{\code{prefix}}{\verb{Named list of character scalars}, where values are long-form
-and names are the corresponding abbreviation.}
-
-\item{\code{query}}{\verb{Named list} of character vectors, with first element indicating
-query form (SELECT, ASK, DESCRIBE), and the second indicating the content
-of the query itself.}
-
-\item{\code{where}}{\code{List} of triples}
+\item{\code{sparql.}}{\verb{Named list}. Contains SPARQL code in three sections:
+\code{prefix}, \code{query} and \code{where}.}
 }}
 
 \examples{

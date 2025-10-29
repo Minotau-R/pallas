@@ -6,6 +6,9 @@
 #' @return the name of the extra data slot
 NULL
 
+method(dimnames, OWL) <- function(x) list("term", c("C", "P"))
+method(dim, OWL) <- function(x) lengths(dimnames(x))
+
 
 
 
@@ -15,21 +18,49 @@ S7::method(print, OWL) <- function(x, ...) {
     cat(
         paste0(paste(class(x), collapse = " "), ".\n")
     )
-    print(S7::S7_data(x))
+    print(x@.sparql)
 
-    if( length(x@prefix) == 0L ) {
+    if( length(x@.sparql[["prefix"]]) == 0L ) {
         message(
             "No 'prefix' found. Add one or more prefixes with `add_prefix()`."
             )
     }
-    if( length(x@query) == 0L ) {
+    if( length(x@.sparql[["query"]]) == 0L ) {
         message("No 'query' found. Add and define a query with `add_query()`.")
     }
-    if( length(x@where) == 0L ) {
+    if( length(x@.sparql[["where"]]) == 0L ) {
         message("No 'where' found. Add where-clauses with `where_clause()`.")
     }
     invisible(NULL)
 }
+
+
+#' @export
+#'
+S7::method(tbl_vars, OWL) <- function(x) `tbl_vars.pallas::OWL`(x)
+
+#' @export
+#'
+`tbl_vars.pallas::OWL` <- function(x) c("C", "P")
+
+#' @export
+#'
+S7::method(group_vars, OWL) <- function(x) `group_vars.pallas::OWL`(x)
+
+#' @export
+#'
+`group_vars.pallas::OWL` <- function(x) {
+    # Cannot group in OWL context.
+    list()
+}
+
+
+#' @export
+#'
+S7::method(format, OWL) <- function(x, ...) paste0(
+    paste(class(x), collapse = " ")
+)
+
 
 #' @export
 #'
@@ -40,19 +71,16 @@ S7::method(.DollarNames, OWL) <- function(
 #' @importFrom utils .DollarNames
 #'
 `.DollarNames.pallas::OWL` <- function(x, pattern = "") {
-    grep( pattern, c("C", "P"), value = TRUE )
+    grep( pattern, colnames(x), value = TRUE )
 }
 
-S7::method(`$`, OWL) <- function(object, name) S7::prop(object, name)
-
-S7::method(length, OWL) <- function(x) length(c("C" = 1, "P" = 2))
-
+S7::method(`$`, OWL) <- function(object, name) `[[`(object@.env, name)
 
 local({
     S7::method(`[[`, OWL) <- function(x, i) {
         idx <- c("C" = 1, "P" = 2)
         name <- names(idx)[[idx[[i]]]]
-        S7::prop(x, name)
+        `[[`(x@.env, name)
     }
 })
 

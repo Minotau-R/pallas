@@ -18,11 +18,9 @@
 OWL_env <- S7::new_class(
     "OWL_env",
     package = "pallas",
-    parent = S7::class_list,
+    parent = S7::new_S3_class("tbl"),
 
     constructor = function( x ) {
-        x <- as.list(x)
-        stopifnot("'x' should be (coercible to) a list." = inherits(x, "list"))
         S7::new_object(
             .parent = x
         )
@@ -36,12 +34,8 @@ OWL_env <- S7::new_class(
 #' `OWL` is an S7 class to compose and manage `SPARQL` queries.
 #' @slot .env `Named list`. Contains convenience functions, for instance
 #'     those generated from `map_endpoint()`
-#' @slot prefix `Named list of character scalars`, where values are long-form
-#'     and names are the corresponding abbreviation.
-#' @slot query `Named list` of character vectors, with first element indicating
-#'     query form (SELECT, ASK, DESCRIBE), and the second indicating the content
-#'      of the query itself.
-#' @slot where `List` of triples
+#' @slot sparql. `Named list`. Contains SPARQL code in three sections:
+#'     `prefix`, `query` and `where`.
 #' @param .env `Named list`. Contains convenience functions, for instance
 #'     those generated from `map_endpoint()`
 #' @param prefix `Named list of character scalars`, where values are long-form
@@ -59,16 +53,10 @@ OWL_env <- S7::new_class(
 OWL <- S7::new_class(
     "OWL",
     package = "pallas",
-    parent = S7::class_list,
+    parent = S7::new_S3_class("tbl"),
     properties  = list(
         .env = S7::class_list,
-        P = S7::new_property(getter = function(self) self@.env$P),
-        C = S7::new_property(getter = function(self) self@.env$C),
-        V = S7::new_property(getter = function(self) self@.env$V),
-
-        prefix  = S7::new_property( getter = function(self) S7::S7_data(self)[["prefix"]]),
-        query   = S7::new_property( getter = function(self) S7::S7_data(self)[["query"]]),
-        where   = S7::new_property( getter = function(self) S7::S7_data(self)[["where"]])
+        .sparql = S7::class_list
     ),
     constructor = function(
         .env = list(
@@ -77,37 +65,40 @@ OWL <- S7::new_class(
             V = character(0L),
             prefixes = data.frame()
         ),
-        prefix = list(),
-        query = list(),
-        where = list()
+        prefix = "",
+        query = "",
+        where = ""
     ) {
-        x <- list(
-            prefix = prefix,
-            query = query,
-            where = where
-        )
+        x <- data.frame(P = "", C = "")
+
         .env <- .env[c("P", "C", "V", "prefixes")]
         S7::new_object(
             .parent = x,
-            .env = .env
-                        )
+            .env = .env,
+            .sparql = list(
+                prefix = prefix,
+                query = query,
+                where = where
+            )
+        )
     },
     validator = function(self) {
-        .self <- S7::S7_data(self)
-        ll <- vapply(.self, is.vector, FALSE, USE.NAMES = TRUE)
-
-        if(!identical(names(ll), c("prefix", "query", "where")) ) {
-            "OWL list should only contain 'prefix', 'query' and 'where'."
-        }
-        if(!all(ll)){
-            paste0("Content of '", paste0(names(ll)[!ll], collapse = "', '"),
-                   "' must inherit from vector.")
-        }
+        # .self <- S7::S7_data(self)
+        # ll <- vapply(.self, is.vector, FALSE, USE.NAMES = TRUE)
+        #
+         if(!identical(names(self@.sparql), c("prefix", "query", "where")) ) {
+             "`.sparql` slot should only contain 'prefix', 'query' and 'where'."
+         }
+        # if(!all(ll)){
+        #     paste0("Content of '", paste0(names(ll)[!ll], collapse = "', '"),
+        #            "' must inherit from vector.")
+        # }
         if( !all(names(self@.env) %in% c("C", "P", "prefixes", "V")) ) {
             "names of '.env' must contain exactly c('C', 'P', 'prefixes', 'V')."
         }
     }
 )
+
 
 
 #' S7 class to contain an RDF triple.
