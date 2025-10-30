@@ -3,7 +3,7 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   pallas: pallas.html
-last_built: 2025-10-29T17:27Z
+last_built: 2025-10-30T08:52Z
 urls:
   reference: https://minotau-r.github.io/pallas/reference
   article: https://minotau-r.github.io/pallas/articles
