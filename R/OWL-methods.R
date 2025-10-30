@@ -16,17 +16,22 @@ S7::method(print, OWL) <- function(x, ...) {
     cat(
         paste0(paste(class(x), collapse = " "), ".\n")
     )
-    print(x@.sparql)
+    for( i in seq_along(x@.sparql)) {
+        cat(x@.sparql[[i]], sep = "\n")
+    }
 
-    if( length(x@.sparql[["prefix"]]) == 0L ) {
+    if( length(
+        x@.sparql[["prefix"]]) == 0L || identical(x@.sparql[["prefix"]], "") ) {
         message(
             "No 'prefix' found. Add one or more prefixes with `add_prefix()`."
             )
     }
-    if( length(x@.sparql[["query"]]) == 0L ) {
+    if( length(
+        x@.sparql[["query"]]) == 0L || identical(x@.sparql[["query"]], "")) {
         message("No 'query' found. Add and define a query with `add_query()`.")
     }
-    if( length(x@.sparql[["where"]]) == 0L ) {
+    if( length(
+        x@.sparql[["where"]]) == 0L || identical(x@.sparql[["where"]], "")) {
         message("No 'where' found. Add where-clauses with `where_clause()`.")
     }
     invisible(NULL)
@@ -93,6 +98,12 @@ local({
     }
 })
 
+#' @export
+method(as.character, OWL) <- function(x, ...) {
+    ch <- unlist(x@.sparql, use.names = FALSE)
+    ch <- ch[ch != ""]
+    ch
+}
 
 .prefix_to_SPARQL <- function(x) {
     if(is.null(x)) {return(list())}
