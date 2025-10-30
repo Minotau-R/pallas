@@ -6,13 +6,26 @@
 #' names
 #' @param x `OWL_env`.
 #' @returns The names of content within `OWL_env` object `x`.
+#' @importFrom rlang is_missing
 NULL
+
 
 method(dimnames, OWL_env) <- function(x) list("term", names(x))
 method(dim, OWL_env) <- function(x) lengths(dimnames(x))
-method(`[`, OWL_env) <- function(x, i, j, drop = TRUE) `[[`(S7::S7_data(x), i)
 method(`print`, OWL_env) <- function(x, ...) print(S7::S7_data(x), ...)
 
+local({
+    method(`[[`, OWL_env) <- function(x, i) `[[`(S7::S7_data(x), i)
+    method(`[`, OWL_env) <- function(x, i, j, drop = TRUE) {
+        if(rlang::is_missing(i)) {
+            if(rlang::is_missing(j)) { return(x) } else {
+                return( `[[`(S7::S7_data(x), j) )
+            }
+        } else {
+            return( `[[`(S7::S7_data(x), i) )
+        }
+    }
+})
 
 #' @export
 #'

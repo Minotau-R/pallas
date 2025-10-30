@@ -1,0 +1,12 @@
+test_that("OWL satisfies tbl methods for completion.", {
+    o <- OWL()
+    expect_identical( dimnames(o), list("term", c("C", "P")) )
+    expect_identical( dim(o), lengths(list("term", c("C", "P"))) )
+    expect_identical( length(o), 2L)
+    expect_identical(o, o[])
+    expect_error(o[[]], "missing subscript")
+    expect_no_error(o[1L,"ignore_me"])
+    expect_error(o["dont_ignore_me"], "subscript out of bounds")
+    expect_identical(o$C, o["C"])
+    expect_identical(o$P, o["P"])
+})

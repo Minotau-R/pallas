@@ -10,8 +10,6 @@ method(dimnames, OWL) <- function(x) list("term", c("C", "P"))
 method(dim, OWL) <- function(x) lengths(dimnames(x))
 
 
-
-
 #' @export
 #'
 S7::method(print, OWL) <- function(x, ...) {
@@ -81,6 +79,17 @@ local({
         idx <- c("C" = 1, "P" = 2)
         name <- names(idx)[[idx[[i]]]]
         `[[`(x@.env, name)
+    }
+
+
+    method(`[`, OWL) <- function(x, i, j, drop = TRUE) {
+        if(rlang::is_missing(i)) {
+            if(rlang::is_missing(j)) { return(x) } else {
+                return( `[[`(x, j) )
+            }
+        } else {
+            return( `[[`(x, i) )
+        }
     }
 })
 
