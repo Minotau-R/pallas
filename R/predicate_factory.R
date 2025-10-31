@@ -57,19 +57,12 @@ predicate_factory <- function(
     }
 
     out_fun <- function(... = "?subject ~ ?object") {
-        predicate.formula(..., what = i, prefix = prefix)
+        predicate(..., what = i, prefix = prefix)
     }
     out_fun <- term(out_fun, hint = hint)
 
     return(out_fun)
-    # Return a wrapper around predicate.formula.
-    # Adjust formals to contain hint.
-    # rlang::`fn_fmls<-`(
-    #     function(... = subject ~ object ) {
-    #         predicate.formula(..., what = i, prefix = prefix)
-    #     },
-    #     value = list("..." = hint)
-    # )
+
 }
 
 

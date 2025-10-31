@@ -29,8 +29,10 @@ NULL
 
 #' @export
 #' @importFrom S7 method<- class_call method
+#' @importFrom rlang enexpr
+#'
 S7::method(predicate, S7::class_call) <- function(x, what = "", prefix = "") {
-    x <- predicate.call(substitute(x))
+    x <- predicate.call(rlang::enexpr(x))
     # Call formula method
     (S7::method(predicate, object = x))(x, what, prefix)
 }
@@ -52,6 +54,7 @@ predicate.call <- function(x)  {
         x_1 <- as.character(x[[1L]])
     }
     x <- eval(x, envir = NULL)
+
     return(x)
 }
 
@@ -62,7 +65,7 @@ S7::method(predicate, S7::class_formula) <-
     function(x, what = "", prefix = "") predicate.formula(x, what, prefix)
 
 
-
+#' @importFrom rlang enexpr
 predicate.formula <- function(x, what = "", prefix = "") {
     x <- .Qs2var(x)
 
@@ -100,11 +103,10 @@ predicate.formula <- function(x, what = "", prefix = "") {
     do.call("~", c(LHS, RHS))
 }
 
+#' @importFrom rlang is_call
 .Q2var <- function(x) {
-    if(is.call(x)) {
-        if(as.character(x)[[1L]] == "?") {
-            x <- as.symbol(paste0("?", x[[-1L]]))
-        }
+    if(is_call(x, "?")) {
+        x <- as.symbol(paste0("?", x[[-1L]]))
     }
     return(x)
 }

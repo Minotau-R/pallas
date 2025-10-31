@@ -51,3 +51,16 @@ S7::method(group_vars, OWL_env) <- function(x) `group_vars.pallas::OWL_env`(x)
 }
 
 
+#' @export
+#'
+S7::method(.DollarNames, OWL_env) <- function(
+        x, pattern = ""
+) `.DollarNames.pallas::OWL`(x, pattern)
+
+#' @importFrom utils .DollarNames
+#'
+`.DollarNames.pallas::OWL_env` <- function(x, pattern = "") {
+    grep( pattern, colnames(x), value = TRUE )
+}
+
+S7::method(`$`, OWL_env) <- function(object, name) `[[`(object, name)

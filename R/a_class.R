@@ -27,8 +27,9 @@ NULL
 
 #' @export
 #' @importFrom S7 method<- class_call method
+#' @importFrom rlang enexpr
 S7::method(a_class, S7::class_call) <- function(x, what = "", prefix = "") {
-    x <- .Q2var(substitute(x))
+    x <- .Q2var(rlang::enexpr(x))
     x <- .colon2var(x)
     triple(
         subject = as.character(x),
@@ -39,8 +40,9 @@ S7::method(a_class, S7::class_call) <- function(x, what = "", prefix = "") {
 
 
 #' @export
-S7::method(a_class, S7::class_name) <- function(x, what, prefix = "")
-        a_class.name(rlang::enexpr(x), what, prefix)
+#' @importFrom rlang enexpr
+S7::method(a_class, S7::class_name) <-
+    function(x, what, prefix = "") a_class.name(rlang::enexpr(x), what, prefix)
 
 #' @export
 S7::method(a_class, S7::class_character) <-
@@ -49,7 +51,6 @@ S7::method(a_class, S7::class_character) <-
 #' @importFrom rlang enexpr
 #' @importFrom utils capture.output
 a_class.name <- function(x, what, prefix = "") {
-
     x <- .Q2var(x)
     triple(
         subject = utils::capture.output(x),
@@ -64,20 +65,17 @@ a_class.character <- function(x, what, prefix = "") triple(
     object = c(prefix, what)
 )
 
+#' @importFrom rlang is_call
 .colon2var <- function(x) {
-    if(is.call(x)) {
-        if( as.character(x)[1L] %in% c(":", "c", "~") ) {
+        if( rlang::is_call(x, c(":", "c", "~")) ) {
             x1 <- as.character(x)[2L]
             x2 <- as.character(x)[3L]
-
             if( is.na(x2) ) {
                 x2 <- x1
                 x1 <- ""
             }
             x <- c( x1, x2 )
-
         }
-    }
     return(x)
 }
 
