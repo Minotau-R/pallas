@@ -4,7 +4,13 @@
 \alias{predicate_factory}
 \title{Generate custom functions based on available predicates.}
 \usage{
-predicate_factory(x, prefix = "", to.list = TRUE, vocab.table = NULL)
+predicate_factory(
+  x,
+  prefix = "",
+  to.local = TRUE,
+  vocab.table = NULL,
+  name.prepend = "P."
+)
 }
 \arguments{
 \item{x}{\verb{Character scalar}. Names of the desired predicate functions.}
@@ -12,11 +18,14 @@ predicate_factory(x, prefix = "", to.list = TRUE, vocab.table = NULL)
 \item{prefix}{\verb{Character scalar}. Name of the prefix the class is from.
 (Default: \code{""})}
 
-\item{to.list}{\verb{Logical scalar}. Whether to return functions in a list
+\item{to.local}{\verb{Logical scalar}. Whether to return functions in a list
 (\code{TRUE}, Default) or to the environment (\code{FALSE}).}
 
 \item{vocab.table}{\code{data.frame}. Used to customize input hints. Output of
 \code{map_endpoint} with \code{return.table} set to \code{TRUE}. (Default: NULL).}
+
+\item{name.prepend}{\verb{Character scalar}. Prefix for the produced a_class
+functions. (Default: \code{"P."}).}
 }
 \value{
 A list of functions, or to the environment.
@@ -31,8 +40,8 @@ P <- predicate_factory(
     prefix = "a"
     )
 
-P$predicate_A(subject ~ object)
-P$predicate_B(subject ~ object)
-P$predicate_C(subject ~ object)
+P$P.predicate_A(subject ~ object)
+P$P.predicate_B(subject ~ object)
+P$P.predicate_C(subject ~ object)
 
 }

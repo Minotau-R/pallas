@@ -14,8 +14,14 @@
 #' @examples
 #' # Don't query endpoints unintentionally.
 #' if(FALSE) {
-#'     x <- map_endpoint(endpoint_url = "https://sparql.uniprot.org/")
-#'         x |> where_clause()
+#'
+#' x <- map_endpoint(endpoint_url = "https://sparql.uniprot.org/")
+#' x |>
+#'     where_clause(C.Enzyme(?a)) |>
+#'     where_clause(P.alternativeName(g:h ~ ?j)) |>
+#'     where_clause(P.activity(?d ~ e:f),
+#'                  C.Cluster(b:c))
+#'
 #' }
 #'
 map_endpoint <- function(
@@ -85,13 +91,13 @@ WHERE {
     class_list <-
         mapply(a_class_factory, class_list, names(class_list), SIMPLIFY = FALSE)
     lexicon <- list(
-        P = OWL_env(Reduce(c, pred_list)),
-        C = OWL_env(Reduce(c, class_list)),
         V = character(0L),
         prefixes = pre_tab
     )
     OWL(
         .env   = lexicon,
+        P = Reduce(c, pred_list),
+        C = Reduce(c, class_list),
         prefix = .prefix_to_SPARQL(pre_tab)
     )
 }

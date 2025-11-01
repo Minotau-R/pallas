@@ -4,7 +4,7 @@
 \alias{a_class_factory}
 \title{Generate custom \code{a} functions based on available types.}
 \usage{
-a_class_factory(x, prefix = "", to.list = TRUE)
+a_class_factory(x, prefix = "", to.local = TRUE, name.prepend = "C.")
 }
 \arguments{
 \item{x}{\verb{Character vector}. Names of the desired type functions.}
@@ -12,8 +12,11 @@ a_class_factory(x, prefix = "", to.list = TRUE)
 \item{prefix}{\verb{Character scalar}. Name of the prefix the class is from.
 (Default: \code{""})}
 
-\item{to.list}{\verb{Logical scalar}. Whether to return functions in a list
+\item{to.local}{\verb{Logical scalar}. Whether to return functions in a list
 (\code{TRUE}, Default) or to the environment (\code{FALSE}).}
+
+\item{name.prepend}{\verb{Character scalar}. Prefix for the produced predicate
+functions. (Default: \code{"C."}).}
 }
 \value{
 A list of functions, or to the environment.
@@ -24,8 +27,8 @@ Generate custom \code{a} functions based on available types.
 \examples{
 C <- a_class_factory(x = c("class_A", "class_B", "class_C"))
 
-C$class_A(?subject)
-C$class_B(subject)
-C$class_C("?subject")
+C$C.class_A(?subject)
+C$C.class_B(subject)
+C$C.class_C("?subject")
 
 }

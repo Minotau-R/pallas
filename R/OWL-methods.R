@@ -6,7 +6,7 @@
 #' @return the name of the extra data slot
 NULL
 
-method(dimnames, OWL) <- function(x) list("term", c("C", "P"))
+method(dimnames, OWL) <- function(x) list("term", ls(S7::S7_data(x)))
 method(dim, OWL) <- function(x) lengths(dimnames(x))
 
 
@@ -17,7 +17,9 @@ S7::method(print, OWL) <- function(x, ...) {
         paste0(paste(class(x), collapse = " "), ".\n")
     )
     for( i in seq_along(x@.sparql)) {
-        cat(x@.sparql[[i]], sep = "\n")
+        for(t in seq_along(x@.sparql[[i]])) {
+            cat(x@.sparql[[i]][[t]], "\n")
+        }
     }
 
     if( length(
@@ -39,12 +41,13 @@ S7::method(print, OWL) <- function(x, ...) {
 
 
 #' @export
+#' @importFrom dplyr tbl_vars group_vars
 #'
 S7::method(tbl_vars, OWL) <- function(x) `tbl_vars.pallas::OWL`(x)
 
 #' @export
 #'
-`tbl_vars.pallas::OWL` <- function(x) c("C", "P")
+`tbl_vars.pallas::OWL` <- function(x) colnames(x)
 
 #' @export
 #'
@@ -54,15 +57,13 @@ S7::method(group_vars, OWL) <- function(x) `group_vars.pallas::OWL`(x)
 #'
 `group_vars.pallas::OWL` <- function(x) {
     # Cannot group in OWL context.
-    list()
+    NULL
 }
 
 
 #' @export
 #'
-S7::method(format, OWL) <- function(x, ...) paste0(
-    paste(class(x), collapse = " ")
-)
+S7::method(format, OWL) <- function(x, ...) paste(class(x), collapse = " ")
 
 
 #' @export
@@ -74,22 +75,20 @@ S7::method(.DollarNames, OWL) <- function(
 #' @importFrom utils .DollarNames
 #'
 `.DollarNames.pallas::OWL` <- function(x, pattern = "") {
-    grep( pattern, colnames(x), value = TRUE )
+   # full_range <- c(colnames(x), paste0("C$",names(x$C)), paste0("P$",names(x$P)))
+    paste0(grep( pattern, colnames(x), value = TRUE ), "()")
 }
 
-S7::method(`$`, OWL) <- function(object, name) `[[`(object@.env, name)
+S7::method(`$`, OWL) <- function(object, name) `[[`(S7::S7_data(object), name)
 
 local({
     S7::method(`[[`, OWL) <- function(x, i) {
-        idx <- c("C" = 1, "P" = 2)
-        name <- names(idx)[[idx[[i]]]]
-        `[[`(x@.env, name)
+        `[[`(S7::S7_data(x), i)
     }
 
-
-    method(`[`, OWL) <- function(x, i, j, drop = TRUE) {
-        if(rlang::is_missing(i)) {
-            if(rlang::is_missing(j)) { return(x) } else {
+    S7::method(`[`, OWL) <- function(x, i, j, drop = TRUE) {
+        if( rlang::is_missing(i) ) {
+            if( rlang::is_missing(j) ) { return( x ) } else {
                 return( `[[`(x, j) )
             }
         } else {
@@ -106,7 +105,7 @@ method(as.character, OWL) <- function(x, ...) {
 }
 
 .prefix_to_SPARQL <- function(x) {
-    if(is.null(x)) {return(list())}
+    if( is.null(x) ) { return(list()) }
     paste0( "PREFIX ", apply(x, 1L, paste0, collapse = ": <"), ">" )
 }
 
