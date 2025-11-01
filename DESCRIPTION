@@ -1,6 +1,6 @@
 Package: pallas
 Title: Construct Web Ontology Language (OWL) and query SPARQL endpoints from R
-Version: 0.0.0.9001
+Version: 0.1.0.0
 Authors@R: c(
     person("Thomaz", "Bastiaanssen", email = "thomazbastiaanssen@gmail.com", 
         role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X")),

@@ -16,29 +16,24 @@ S7::method(print, OWL) <- function(x, ...) {
     cat(
         paste0(paste(class(x), collapse = " "), ".\n")
     )
-    for( i in seq_along(x@.sparql)) {
-        for(t in seq_along(x@.sparql[[i]])) {
-            cat(x@.sparql[[i]][[t]], "\n")
-        }
-    }
+    cat(x@to_SPARQL, sep = "\n")
 
-    if( length(
-        x@.sparql[["prefix"]]) == 0L || identical(x@.sparql[["prefix"]], "") ) {
+    ll <- x@.sparql
+    if( length(ll[["prefix"]]) == 0L || identical(ll[["prefix"]], "") ) {
         message(
             "No 'prefix' found. Add one or more prefixes with `add_prefix()`."
             )
     }
-    if( length(
-        x@.sparql[["query"]]) == 0L || identical(x@.sparql[["query"]], "")) {
-        message("No 'query' found. Add and define a query with `add_query()`.")
+    if( length(ll[["query"]]) == 0L || identical(ll[["query"]], "") ) {
+        message("No 'query' found. Use `ask_query()` or `select_query()`.")
     }
-    if( length(
-        x@.sparql[["where"]]) == 0L || identical(x@.sparql[["where"]], "")) {
+    if( length(ll[["where"]]) == 0L || identical(ll[["where"]], "")) {
         message("No 'where' found. Add where-clauses with `where_clause()`.")
     }
     invisible(NULL)
 }
 
+S7::method(as.SPARQL, OWL) <- function(x) x@to_SPARQL
 
 #' @export
 #' @importFrom dplyr tbl_vars group_vars
@@ -75,7 +70,6 @@ S7::method(.DollarNames, OWL) <- function(
 #' @importFrom utils .DollarNames
 #'
 `.DollarNames.pallas::OWL` <- function(x, pattern = "") {
-   # full_range <- c(colnames(x), paste0("C$",names(x$C)), paste0("P$",names(x$P)))
     paste0(grep( pattern, colnames(x), value = TRUE ), "()")
 }
 
@@ -109,3 +103,19 @@ method(as.character, OWL) <- function(x, ...) {
     paste0( "PREFIX ", apply(x, 1L, paste0, collapse = ": <"), ">" )
 }
 
+.check_SPARQLvars <- function(x) {
+    query_vars <- strsplit(paste0(x@.sparql[["query"]], collapse = " "), " ")
+    query_vars <- grep("^\\?", unlist(query_vars), value = TRUE)
+    where_vars  <- paste0(
+        "?",
+        unique(unlist(lapply( x@.sparql[["where"]], names), use.names = FALSE))
+        )
+    if(!all(query_vars %in% where_vars)) {
+        stop(
+            "Parameters '",
+            paste0(setdiff(query_vars, where_vars), collapse = "', '"),
+        "' are mentioned in the query but not found in 'WHERE' clause."
+        )
+
+    }
+}

@@ -42,7 +42,8 @@ classes and predicates, are defined at a given endpoint. `map_endpoint()` takes
 the URL of an endpoint as input and returns an object of the `OWL` S7 class.
 
 ```{r map-endpoint, cache = TRUE}
-x <- map_endpoint(endpoint_url = "https://sparql.uniprot.org/")
+endpoint_url = "https://sparql.uniprot.org/"
+x <- map_endpoint(endpoint_url)
 ```
 
 `OWL` objects contain [Web Ontology Language](https://www.w3.org/OWL/) (OWL). A 
@@ -68,3 +69,18 @@ x |>
     where_clause(P.activity(?d ~ e:f),
                  C.Cluster(b:c))
 ```
+
+```{r query-demo, cache=TRUE}
+res <- x |> 
+  select_query("SELECT ?protein") |>
+  where_clause(
+    C.Protein(?protein),
+    triple("?protein", "core:mnemonic", "'A4_HUMAN'")
+    ) |> 
+  as.SPARQL() |>
+  send_query(endpoint_url = "https://sparql.uniprot.org/")
+
+res
+
+```
+

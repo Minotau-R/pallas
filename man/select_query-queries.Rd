@@ -2,10 +2,12 @@
 % Please edit documentation in R/AllGenerics.R
 \name{select_query}
 \alias{select_query}
-\alias{select_clause}
+\alias{ask_query}
 \title{Define a SELECT SPARQL command.}
 \usage{
-select_clause(x, ...)
+select_query(x, ...)
+
+ask_query(x, ...)
 }
 \arguments{
 \item{x}{An object.}
@@ -13,9 +15,12 @@ select_clause(x, ...)
 \item{...}{\code{Expression} the SELECT statement.}
 }
 \value{
-a \code{OWL} with the defined expressions included in the \code{query}
-slot.
+a \code{OWL} with the defined expressions included in the \code{query} slot.
+
+a \code{OWL} with the defined expressions included in the \code{query} slot.
 }
 \description{
 Define a SELECT SPARQL command.
+
+Define an ASK SPARQL command.
 }

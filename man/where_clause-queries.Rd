@@ -13,8 +13,7 @@ where_clause(x, ...)
 each define an RDF triple for the where clause.}
 }
 \value{
-a \code{OWL} with the defined expressions included in the \code{where}
-slot.
+a \code{OWL} with the defined expressions included in the \code{where} slot.
 }
 \description{
 Define one or more triples for a SPARQL WHERE-clause.

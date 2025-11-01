@@ -4,9 +4,22 @@
 NULL
 
 #' @importFrom S7 method<-
-S7::method(where_clause, OWL) <- function(x, ..., .append = TRUE, .drop.empty = TRUE) {
-    .edit_sparql(x, section = "where", .append = .append, .drop.empty = .drop.empty, ...)
-    }
+S7::method(where_clause, OWL) <-
+    function(x, ..., .append = TRUE, .drop.empty = TRUE) .edit_sparql(
+        x, section = "where", .append = .append, .drop.empty = .drop.empty, ...
+    )
+
+#' @importFrom S7 method<-
+S7::method(select_query, OWL) <-
+    function(x, ..., .append = FALSE, .drop.empty = TRUE) .edit_sparql(
+        x, section = "query", .append = .append, .drop.empty = .drop.empty, ...
+    )
+
+#' @importFrom S7 method<-
+S7::method(ask_query, OWL) <-
+    function(x, .append = FALSE, .drop.empty = TRUE) .edit_sparql(
+        x, section = "query", .append = .append, .drop.empty = .drop.empty, "ASK"
+    )
 
 #' @importFrom rlang exprs
 .edit_sparql <- function(x, section, .append, .drop.empty, ...) {
@@ -18,23 +31,3 @@ S7::method(where_clause, OWL) <- function(x, ..., .append = TRUE, .drop.empty = 
     x
 }
 
-.OWL_env <- function(e) {
-    print(e)
-    env_calls <- vapply(e, .is_env_call, FALSE)
-    if(any(env_calls)) {
-
-    e[env_calls] <- lapply(
-        e[env_calls], function(z) str2expression(paste0("x$", deparse1(z)))
-        )
-    }
-}
-
-.is_env_call <- function(x) {
-    y <- x[[1L]]
-    print(y)
-
-    if(is_call(y, name = "$")) {
-        return( as.character(y[[2L]]) %in% c("C", "P") )
-    }
-    FALSE
-}

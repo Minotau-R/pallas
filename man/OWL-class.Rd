@@ -9,7 +9,7 @@ OWL(
   C = list(),
   P = list(),
   prefix = "",
-  query = "",
+  query = "SELECT * ",
   where = ""
 )
 }
@@ -44,8 +44,10 @@ functions (\code{term}s), but also the variables named in the query so far.
 \item{\code{.env}}{\verb{Named list}. Contains additional envitonmental information
 besides convenience functions generated from \code{map_endpoint()}}
 
-\item{\code{sparql.}}{\verb{Named list}. Contains SPARQL code in three sections:
+\item{\code{.sparql}}{\verb{Named list}. Contains SPARQL code in three sections:
 \code{prefix}, \code{query} and \code{where}.}
+
+\item{\code{to_SPARQL}}{Retrieves the contained SPARQL query as a \verb{Character scalar}.}
 }}
 
 \examples{
