@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">pallas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predicate_factory</span><span class="op">(</span><span class="va">x</span>, prefix <span class="op">=</span> <span class="st">""</span>, to.list <span class="op">=</span> <span class="cn">TRUE</span>, vocab.table <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predicate_factory</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  prefix <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  to.local <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  vocab.table <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  name.prepend <span class="op">=</span> <span class="st">"P."</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -54,7 +60,7 @@
 (Default: <code>""</code>)</p></dd>
 
 
-<dt id="arg-to-list">to.list<a class="anchor" aria-label="anchor" href="#arg-to-list"></a></dt>
+<dt id="arg-to-local">to.local<a class="anchor" aria-label="anchor" href="#arg-to-local"></a></dt>
 <dd><p><code>Logical scalar</code>. Whether to return functions in a list
 (<code>TRUE</code>, Default) or to the environment (<code>FALSE</code>).</p></dd>
 
@@ -62,6 +68,11 @@
 <dt id="arg-vocab-table">vocab.table<a class="anchor" aria-label="anchor" href="#arg-vocab-table"></a></dt>
 <dd><p><code>data.frame</code>. Used to customize input hints. Output of
 <code>map_endpoint</code> with <code>return.table</code> set to <code>TRUE</code>. (Default: NULL).</p></dd>
+
+
+<dt id="arg-name-prepend">name.prepend<a class="anchor" aria-label="anchor" href="#arg-name-prepend"></a></dt>
+<dd><p><code>Character scalar</code>. Prefix for the produced a_class
+functions. (Default: <code>"P."</code>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -77,15 +88,15 @@
 <span class="r-in"><span>    prefix <span class="op">=</span> <span class="st">"a"</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">P</span><span class="op">$</span><span class="fu">predicate_A</span><span class="op">(</span><span class="va">subject</span> <span class="op">~</span> <span class="va">object</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">P</span><span class="op">$</span><span class="fu">P.predicate_A</span><span class="op">(</span><span class="va">subject</span> <span class="op">~</span> <span class="va">object</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pallas::triple character S7_object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> subject  predicate      object     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> subject  a:predicate_A  object  .  </span>
-<span class="r-in"><span><span class="va">P</span><span class="op">$</span><span class="fu">predicate_B</span><span class="op">(</span><span class="va">subject</span> <span class="op">~</span> <span class="va">object</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">P</span><span class="op">$</span><span class="fu">P.predicate_B</span><span class="op">(</span><span class="va">subject</span> <span class="op">~</span> <span class="va">object</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pallas::triple character S7_object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> subject  predicate      object     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> subject  a:predicate_B  object  .  </span>
-<span class="r-in"><span><span class="va">P</span><span class="op">$</span><span class="fu">predicate_C</span><span class="op">(</span><span class="va">subject</span> <span class="op">~</span> <span class="va">object</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">P</span><span class="op">$</span><span class="fu">P.predicate_C</span><span class="op">(</span><span class="va">subject</span> <span class="op">~</span> <span class="va">object</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pallas::triple character S7_object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> subject  predicate      object     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> subject  a:predicate_C  object  .  </span>

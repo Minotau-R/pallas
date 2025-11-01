@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">pallas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,7 @@ SPARQL terms, namely classes and predicates, are defined at a given
 endpoint. <code><a href="../reference/building-queries.html">map_endpoint()</a></code> takes the URL of an endpoint as
 input and returns an object of the <code>OWL</code> S7 class.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">endpoint_url</span> <span class="op">&lt;-</span> <span class="st">"https://sparql.uniprot.org/"</span></span>
+<code class="sourceCode R"><span><span class="va">endpoint_url</span> <span class="op">=</span> <span class="st">"https://sparql.uniprot.org/"</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/building-queries.html">map_endpoint</a></span><span class="op">(</span><span class="va">endpoint_url</span><span class="op">)</span></span>
 <span><span class="co">#&gt; adding rname '5e918bfe31a47685419ba31861ec8b48ec502dbd71a767e0b138d60c40148804'</span></span></code></pre></div>
 <p><code>OWL</code> objects contain <a href="https://www.w3.org/OWL/" class="external-link">Web Ontology Language</a> (OWL). A
@@ -99,15 +99,49 @@ class:</li>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span></span>
 <span><span class="co">#&gt; pallas::OWL tbl S7_object.</span></span>
-<span><span class="co">#&gt; $prefix</span></span>
-<span><span class="co">#&gt; [1] "PREFIX core: &lt;http://purl.uniprot.org/core/&gt;"</span></span>
-<span><span class="co">#&gt; [2] "PREFIX x01: &lt;http://www.w3.org/2000/01/&gt;"    </span></span>
+<span><span class="co">#&gt; PREFIX core: &lt;http://purl.uniprot.org/core/&gt;</span></span>
+<span><span class="co">#&gt; PREFIX x01: &lt;http://www.w3.org/2000/01/&gt;</span></span>
+<span><span class="co">#&gt; SELECT * </span></span>
+<span><span class="co">#&gt; WHERE</span></span>
+<span><span class="co">#&gt; {</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $query</span></span>
-<span><span class="co">#&gt; [1] ""</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $where</span></span>
-<span><span class="co">#&gt; [1] ""</span></span></code></pre></div>
+<span><span class="co">#&gt; }</span></span>
+<span><span class="co">#&gt; No 'where' found. Add where-clauses with `where_clause()`.</span></span></code></pre></div>
+<p>Printing the object will show our SPARQL code so far. It will also
+give some remarks regarding the SPARQL code we want to write. We can
+specify where-clauses using the function
+<code><a href="../reference/where_clause-queries.html">where_clause()</a></code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="../reference/where_clause-queries.html">where_clause</a></span><span class="op">(</span><span class="fu">C.Enzyme</span><span class="op">(</span><span class="op">?</span><span class="va">a</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="../reference/where_clause-queries.html">where_clause</a></span><span class="op">(</span><span class="fu">P.alternativeName</span><span class="op">(</span><span class="va">g</span><span class="op">:</span><span class="va">h</span> <span class="op">~</span> <span class="op">?</span><span class="va">j</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="../reference/where_clause-queries.html">where_clause</a></span><span class="op">(</span><span class="fu">P.activity</span><span class="op">(</span><span class="op">?</span><span class="va">d</span> <span class="op">~</span> <span class="va">e</span><span class="op">:</span><span class="va">f</span><span class="op">)</span>,</span>
+<span>                 <span class="fu">C.Cluster</span><span class="op">(</span><span class="va">b</span><span class="op">:</span><span class="va">c</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; pallas::OWL tbl S7_object.</span></span>
+<span><span class="co">#&gt; PREFIX core: &lt;http://purl.uniprot.org/core/&gt;</span></span>
+<span><span class="co">#&gt; PREFIX x01: &lt;http://www.w3.org/2000/01/&gt;</span></span>
+<span><span class="co">#&gt; SELECT * </span></span>
+<span><span class="co">#&gt; WHERE</span></span>
+<span><span class="co">#&gt; {</span></span>
+<span><span class="co">#&gt; ?a a core:Enzyme .</span></span>
+<span><span class="co">#&gt; g:h core:alternativeName ?j .</span></span>
+<span><span class="co">#&gt; ?d core:activity e:f .</span></span>
+<span><span class="co">#&gt; b:c a core:Cluster .</span></span>
+<span><span class="co">#&gt; }</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/select_query-queries.html">select_query</a></span><span class="op">(</span><span class="st">"SELECT ?protein"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/where_clause-queries.html">where_clause</a></span><span class="op">(</span></span>
+<span>    <span class="fu">C.Protein</span><span class="op">(</span><span class="op">?</span><span class="va">protein</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/triple-class.html">triple</a></span><span class="op">(</span><span class="st">"?protein"</span>, <span class="st">"core:mnemonic"</span>, <span class="st">"'A4_HUMAN'"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/as.SPARQL.html">as.SPARQL</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/send_query.html">send_query</a></span><span class="op">(</span>endpoint_url <span class="op">=</span> <span class="st">"https://sparql.uniprot.org/"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; adding rname 'ba54eca6524fe4552b036fff5457e43adc2d8a8a9b05382d41d09ebd4574f3f0'</span></span>
+<span></span>
+<span><span class="va">res</span></span>
+<span><span class="co">#&gt;                                  protein</span></span>
+<span><span class="co">#&gt; 1 http://purl.uniprot.org/uniprot/P05067</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
