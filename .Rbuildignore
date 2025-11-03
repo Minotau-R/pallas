@@ -14,3 +14,4 @@
 ^\.air\.toml$
 ^\.travis\.yml$
 ^_pkgdown\.yml$
+^pallas/vignettes/pallas_cache$

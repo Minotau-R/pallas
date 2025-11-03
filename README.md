@@ -29,3 +29,8 @@ Get the latest stable `R` release from
 install.packages("remotes")
 remotes::install_github("minotau-R/pallas")
 ```
+
+## Getting started using pallas
+
+[See the vignette on the package
+site.](https://minotau-r.github.io/pallas/articles/pallas.html)
