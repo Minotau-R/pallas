@@ -17,20 +17,35 @@ S7::method(print, OWL) <- function(x, ...) {
         paste0(paste(class(x), collapse = " "), ".\n")
     )
     cat(x@to_SPARQL, sep = "\n")
+    .check_SPARQL(x)
 
-    ll <- x@.sparql
-    if( length(ll[["prefix"]]) == 0L || identical(ll[["prefix"]], "") ) {
-        message(
-            "No 'prefix' found. Add one or more prefixes with `add_prefix()`."
-            )
-    }
-    if( length(ll[["query"]]) == 0L || identical(ll[["query"]], "") ) {
-        message("No 'query' found. Use `ask_query()` or `select_query()`.")
-    }
-    if( length(ll[["where"]]) == 0L || identical(ll[["where"]], "")) {
-        message("No 'where' found. Add where-clauses with `where_clause()`.")
-    }
     invisible(NULL)
+}
+
+.check_SPARQL <- function(x) {
+    ll <- x@.sparql
+    no_p <-  length(ll[["prefix"]]) == 0L || identical(ll[["prefix"]], "")
+    no_q <-  length(ll[["query"]]) == 0L || identical(ll[["query"]], "")
+    no_w <-  length(ll[["where"]]) == 0L || identical(ll[["where"]], "")
+    if(no_p) message(
+        "No 'prefix' found. Add one or more prefixes with `add_prefix()`."
+    )
+    if(no_q) message(
+        "No 'query' found. Use `ask_query()` or `select_query()`."
+    )
+    if(no_w) message(
+        "No 'where' found. Add where-clauses with `where_clause()`."
+    )
+    if(!no_w) {
+        if(!is.null(var_res <- .check_SPARQLvars(x)))  { message(var_res) }
+        if(!no_p) {
+            if(!is.null(prf_res <- .check_SPARQLprefs(x))) { message(prf_res) }
+        }
+    }
+    if(!no_q) {
+        if(!is.null(qry_res <- .check_SPARQLquery(x))) { message(qry_res) }
+    }
+
 }
 
 S7::method(as.SPARQL, OWL) <- function(x) x@to_SPARQL
@@ -91,6 +106,7 @@ local({
     }
 })
 
+
 #' @export
 method(as.character, OWL) <- function(x, ...) {
     ch <- unlist(x@.sparql, use.names = FALSE)
@@ -104,18 +120,91 @@ method(as.character, OWL) <- function(x, ...) {
 }
 
 .check_SPARQLvars <- function(x) {
-    query_vars <- strsplit(paste0(x@.sparql[["query"]], collapse = " "), " ")
-    query_vars <- grep("^\\?", unlist(query_vars), value = TRUE)
-    where_vars  <- paste0(
-        "?",
-        unique(unlist(lapply( x@.sparql[["where"]], names), use.names = FALSE))
-        )
-    if(!all(query_vars %in% where_vars)) {
-        stop(
-            "Parameters '",
-            paste0(setdiff(query_vars, where_vars), collapse = "', '"),
-        "' are mentioned in the query but not found in 'WHERE' clause."
-        )
+    if(identical(.get_query(x)[1L], "ASK")) { return(invisible()) }
+    query_vars <- .get_query_vars(x)
+    if(identical(query_vars, "*")) { return(invisible()) }
+    where_vars <- .get_where_vars(x)
 
+    if(!all(query_vars %in% where_vars)) {
+        return(
+            paste0(
+                "Parameters '",
+                paste0(setdiff(query_vars, where_vars), collapse = "', '"),
+                "' are mentioned in the query but not found in 'WHERE' clause."
+            )
+        )
+    } else { return( invisible(NULL) ) }
+}
+
+.check_SPARQLprefs <- function(x) {
+    defined_prefs <- .get_defined_prefs(x)
+
+    where_prefs <- .get_where_prefs(x)
+
+    if(!all(where_prefs %in% defined_prefs)) {
+        return(
+            paste0(
+                "Undefined prefixes '",
+                paste0(setdiff(where_prefs, defined_prefs), collapse = "', '"),
+                "' found in 'WHERE' clause."
+            )
+        )
+    } else { return( invisible(NULL) ) }
+}
+
+.get_query_vars <- function(x) {
+    query_vars <- strsplit(paste0(x@.sparql[["query"]], collapse = " "), " ")
+    query_vars <- grep("^\\?|^\\*$", unlist(query_vars), value = TRUE)
+    return(query_vars)
+}
+
+.get_where_vars <- function(x) {
+    where_vars <- lapply( x@.sparql[["where"]], .triple_vars)
+    where_vars <- paste0( "?", unique(unlist(where_vars, use.names = FALSE)) )
+    return(where_vars)
+}
+
+.check_SPARQLquery <- function(x) {
+    query <- .get_query(x)
+    q_type <- query[1]
+    s <- c("SELECT", "ASK", "DESCRIBE", "CONSTRUCT")
+    if( !toupper(q_type) %in% s ) {
+        return(
+            paste0(
+                "Query type '", q_type,
+                "' not recognised. \nValid options include: '",
+                paste0(s, collapse = "', '"),
+                "."
+            )
+        )
     }
+    if(q_type == "ASK" && length(query) > 1L) {
+        return("SPARQL queries of type 'ASK' do not take variable arguments.")
+    }
+    if(q_type %in% c("SELECT", "DESCRIBE") && length(query) == 1L) {
+        return(
+            paste0(
+                "SPARQL queries of type '", q_type,
+                "' require at least one ?variable defined."
+            )
+        )
+    }
+    return( invisible( NULL ) )
+}
+
+.get_query <- function(x) {
+    q <- paste0(unlist(x@.sparql[["query"]], use.names = FALSE), collapse = " ")
+    q <- unlist(strsplit(q, split = " ", fixed = TRUE))
+    return(q)
+}
+
+.get_defined_prefs <- function(x) {
+    defined_prefs <- x@.env[["prefixes"]][["short"]]
+    return(defined_prefs)
+}
+
+.get_where_prefs <- function(x) {
+    where_prefs <- lapply( x@.sparql[["where"]], .triple_prefs)
+    where_prefs <- unique(unlist(where_prefs, use.names = FALSE))
+    return(where_prefs)
 }
